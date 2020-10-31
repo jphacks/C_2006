@@ -2,7 +2,7 @@
   <ion-grid>
     <ion-row>
       <ion-col v-for="post in posts"  :key="post.id" size="4">
-        <img src="../../public/assets/icon/icon.png" alt="picture" class="img">
+        <img src="../../public/assets/icon/icon.png" alt="picture">
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -34,8 +34,3 @@ export default {
 }
 </script>
 
-<style scoped>
-.img{
-  border: 1px black solid;
-}
-</style>
