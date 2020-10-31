@@ -11,18 +11,46 @@
           <ion-title size="large">Mypage</ion-title>
         </ion-toolbar>
       </ion-header>
-      
-      <ExploreContainer name="Tab 3 page" />
+
+      <div>
+        <div class="userarea">
+          <h1>Username</h1>
+          <ion-button>
+            <ion-icon :icon="settingsOutline" />
+          </ion-button>
+        </div>
+
+        <post-container/>
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/vue';
+import { settingsOutline } from 'ionicons/icons';
+import postContainer from '@/components/postContainer.vue';
 
 export default  {
   name: 'Tab3',
-  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton },
+  setup() {
+    return {
+      settingsOutline,
+    }
+  }
 }
 </script>
+
+<style scoped>
+.userarea{
+  margin: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userarea h1{
+  margin: 20px 0px;
+}
+</style>
