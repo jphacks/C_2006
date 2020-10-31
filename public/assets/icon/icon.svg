@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> <!-- Created with Vectornator for iOS (http://vectornator.io/) --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" viewBox="0 0 512 512">
+<metadata>
+<vectornator:setting key="DimensionsVisible" value="1"/>
+<vectornator:setting key="SnapToGrid" value="0"/>
+<vectornator:setting key="SnapToPoints" value="0"/>
+<vectornator:setting key="GuidesVisible" value="1"/>
+<vectornator:setting key="RulersVisible" value="1"/>
+<vectornator:setting key="SnapToEdges" value="0"/>
+<vectornator:setting key="DisplayWhiteBackground" value="0"/>
+<vectornator:setting key="SnapToGuides" value="1"/>
+<vectornator:setting key="GridSpacing" value="36"/>
+<vectornator:setting key="Units" value="Pixels"/>
+<vectornator:setting key="DynamicGuides" value="0"/>
+<vectornator:setting key="New" value="1"/>
+</metadata>
+<defs/>
+<g id="レイヤー 2" vectornator:layerName="レイヤー 2">
+<path d="M0+256C0+114.615+114.615+0+255.999+0C397.383+0+511.998+114.615+511.998+256C511.998+397.385+397.383+512+255.999+512C114.615+512+0+397.385+0+256Z" fill-opacity="0.760148" fill="#e26cba" opacity="1"/>
+</g>
+<g id="レイヤー 1" vectornator:layerName="レイヤー 1">
+<path d="M256+108.82C252.733+108.82+249.595+110.1+247.26+112.384L110.907+223.908C110.75+224.026+110.595+224.148+110.443+224.274L109.979+224.665L109.979+224.689C107.445+227.05+106.004+230.356+106+233.82C106+240.724+111.596+246.32+118.5+246.32L131+246.32L131+383.82C131+397.632+142.187+408.82+156+408.82L356+408.82C369.812+408.82+381+397.632+381+383.82L381+246.32L393.5+246.32C400.404+246.32+406+240.724+406+233.82C406.003+230.348+404.561+227.031+402.02+224.665L401.825+224.518C401.551+224.27+401.266+224.033+400.971+223.81L356+187.018L356+133.82C356+126.92+350.4+121.32+343.5+121.32L331+121.32C324.1+121.32+318.5+126.92+318.5+133.82L318.5+156.354L264.472+112.165C262.169+110.024+259.144+108.83+256+108.82Z" opacity="1" fill="#ffffff"/>
+</g>
+<g id="レイヤー 3" vectornator:layerName="レイヤー 3">
+<path d="M256+373.28C254.74+373.28+253.48+372.884+252.418+372.092C249.628+370.016+184+320.738+184+283.28C184+260.126+202.846+241.28+226+241.28C240.148+241.28+250.372+248.912+256+254.552C261.628+248.912+271.852+241.28+286+241.28C309.154+241.28+328+260.12+328+283.28C328+320.738+262.372+370.016+259.582+372.098C258.52+372.884+257.26+373.28+256+373.28Z" fill-opacity="0.760148" fill="#e26cba" opacity="1"/>
+</g>
+</svg>
