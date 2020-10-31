@@ -22,12 +22,18 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue
 
 export default  {
   name: 'Tab1',
-  
   components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
   data() {
     return {
       newPost: {
-        
+        image: '',
+        text: '',
+        tags: {
+          cost: '',
+          with: '',
+          genre: '',
+          time: '',
+        }
       }
     }
   },
@@ -36,7 +42,7 @@ export default  {
       firebase.database().ref('posts').push({
         text: "fugafuga"
       });
-      console.log('send!')
+      console.log('send!');
     }
   }
 }
