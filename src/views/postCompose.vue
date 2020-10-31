@@ -20,10 +20,10 @@
 import firebase from 'firebase';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 
-export default  {
+export default {
   name: 'Tab1',
   components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
-  data() {
+  setup() {
     return {
       newPost: {
         image: '',
@@ -40,7 +40,7 @@ export default  {
   methods: {
     sendPost() {
       firebase.database().ref('posts').push({
-        text: "fugafuga"
+        text: "fugafuga",
       });
       console.log('send!');
     }
