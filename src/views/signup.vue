@@ -32,14 +32,14 @@
             </ion-item>
           </ion-list>
 
-          <ion-button class="update">
+          <ion-button class="signup">
             <ion-icon slot="start" :icon="personAddOutline"></ion-icon>
             Signup
           </ion-button>
         </div>
 
     
-        <ion-button class="logout" href="/signin">
+        <ion-button class="signin" href="/signin">
           <ion-icon slot="start" :icon="logInOutline"></ion-icon>
           go to Signin page
         </ion-button>
@@ -77,10 +77,10 @@ export default  {
 .forms{
   margin: 0 5%;
 }
-.update{
+.signup{
   margin-top: 30px;
 }
-.logout{
+.signin{
   margin-top: 50px;
 }
 </style>
