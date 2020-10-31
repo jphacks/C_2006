@@ -13,6 +13,7 @@
       </ion-header>
       
       <ExploreContainer name="Tab 2 page" />
+      {{ posts }}
     </ion-content>
   </ion-page>
 </template>
@@ -20,9 +21,25 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 import ExploreContainer from '@/components/ExploreContainer.vue';
+import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
-  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
+  data() {
+    return {
+      posts: [] as any,
+    }
+  },
+  methods: {
+  },
+  created() {
+    const refPosts = firebase.database().ref('posts');
+    refPosts.limitToLast(10).on('child_added', (snapshot: any) => {
+      console.log(snapshot);
+      const post = snapshot.val();
+      console.log(post);
+    });
+  },
 }
 </script>
