@@ -34,7 +34,6 @@ export default  {
   methods: {
     sendPost() {
       firebase.database().ref('posts').push({
-        title: "fuga",
         text: "fugafuga"
       });
       console.log('send!')
