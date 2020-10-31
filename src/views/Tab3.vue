@@ -21,14 +21,20 @@
         </div>
 
         <post-container/>
+
+        <ion-fab class="fab-btn">
+          <ion-fab-button color="danger">
+            <ion-icon :icon="add"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/vue';
-import { settingsOutline } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonFab, IonFabButton } from '@ionic/vue';
+import { settingsOutline, add } from 'ionicons/icons';
 import postContainer from '@/components/postContainer.vue';
 
 export default  {
@@ -37,6 +43,7 @@ export default  {
   setup() {
     return {
       settingsOutline,
+      add
     }
   }
 }
@@ -52,5 +59,11 @@ export default  {
 
 .userarea h1{
   margin: 20px 0px;
+}
+
+.fab-btn{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 </style>
