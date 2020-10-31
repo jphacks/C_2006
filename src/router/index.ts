@@ -26,12 +26,20 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'mypage',
         component: () => import('@/views/Tab3.vue')
+      },
+      {
+        path: 'setting',
+        component: () => import('@/views/setting.vue')
+      },
+      {
+        path: 'compose',
+        component: () => import('@/views/postCompose.vue')
+      },
+      {
+        path: 'post/:id',
+        component: () => import('@/views/postDetail.vue')
       }
     ]
-  },
-  {
-    path: '/setting',
-    component: () => import('@/views/setting.vue')
   },
   {
     path: '/signin',
@@ -40,14 +48,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/signup',
     component: () => import('@/views/signup.vue')
-  },
-  {
-    path: '/post/:id',
-    component: () => import('@/views/postDetail.vue')
-  },
-  {
-    path: '/compose',
-    component: () => import('@/views/postCompose.vue')
   }
 ]
 
