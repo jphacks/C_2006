@@ -2,17 +2,17 @@
   <ion-page>
     <ion-tabs>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button tab="tab1" href="/tabs/tab1">
+        <ion-tab-button tab="tab1" href="/stock">
           <ion-icon :icon="bookmarkOutline" />
           <ion-label>Stocks</ion-label>
         </ion-tab-button>
           
-        <ion-tab-button tab="tab2" href="/tabs/tab2">
+        <ion-tab-button tab="tab2" href="/search">
           <ion-icon :icon="searchOutline" />
           <ion-label>Search</ion-label>
         </ion-tab-button>
         
-        <ion-tab-button tab="tab3" href="/tabs/tab3">
+        <ion-tab-button tab="tab3" href="/mypage">
           <ion-icon :icon="personCircleOutline" />
           <ion-label>Mypage</ion-label>
         </ion-tab-button>
