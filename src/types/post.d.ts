@@ -1,4 +1,4 @@
-import Cost from 'cost.d.ts';
+import { Cost } from 'cost.d.ts';
 
 export interface Post {
     image?: string;
