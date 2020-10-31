@@ -33,13 +33,13 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonFab, IonFabButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
 import { settingsOutline, add } from 'ionicons/icons';
 import postContainer from '@/components/postContainer.vue';
 
 export default  {
   name: 'Tab3',
-  components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton },
+  components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton, IonFab, IonFabButton, IonIcon },
   setup() {
     return {
       settingsOutline,
