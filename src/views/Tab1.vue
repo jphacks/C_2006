@@ -12,17 +12,17 @@
         </ion-toolbar>
       </ion-header>
     
-      <ExploreContainer name="Tab 1 page" />
+      <post-container/>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import postContainer from '@/components/postContainer.vue';
 
 export default  {
   name: 'Tab1',
-  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
 }
 </script>
