@@ -15,7 +15,7 @@
       <div>
         <div class="userarea">
           <h1>Username</h1>
-          <ion-button>
+          <ion-button href="/setting">
             <ion-icon :icon="settingsOutline" />
           </ion-button>
         </div>
@@ -23,7 +23,7 @@
         <post-container/>
 
         <ion-fab class="fab-btn">
-          <ion-fab-button color="danger">
+          <ion-fab-button color="danger" href="/compose">
             <ion-icon :icon="add"></ion-icon>
           </ion-fab-button>
         </ion-fab>
