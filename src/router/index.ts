@@ -30,23 +30,23 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: 'setting',
+    path: '/setting',
     component: () => import('@/views/setting.vue')
   },
   {
-    path: 'signin',
+    path: '/signin',
     component: () => import('@/views/signin.vue')
   },
   {
-    path: 'signup',
+    path: '/signup',
     component: () => import('@/views/signup.vue')
   },
   {
-    path: 'post/:id',
+    path: '/post/:id',
     component: () => import('@/views/postDetail.vue')
   },
   {
-    path: 'compose',
+    path: '/compose',
     component: () => import('@/views/postCompose.vue')
   }
 ]
