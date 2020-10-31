@@ -12,6 +12,8 @@
 Thumbs.db
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
+/src/firebase.js
+
 
 *.log
 log.txt
