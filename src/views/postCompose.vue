@@ -14,10 +14,10 @@
 
       <div class="image-wrapper">
         <img src="../../public/assets/noimage.svg" alt="image">
-        <ion-label class="btn-wrapper" for="fileUpload">
+        <label for="fileUpload" class="btn-wrapper" >
           <ion-fab-button  class="upload-btn"><ion-icon :icon="imageOutline"></ion-icon></ion-fab-button>
-          <ion-input id="fileUpload" type="file"></ion-input>
-        </ion-label>
+          <input id="fileUpload" type="file">
+        </label>
       </div>
 
       <div class="post-wrapper">
@@ -94,7 +94,7 @@ import { imageOutline, cashOutline, hourglassOutline, peopleOutline, folderOutli
 
 export default {
   name: 'Tab1',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonInput, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton },
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton },
   setup() {
     return {
       newPost: {
