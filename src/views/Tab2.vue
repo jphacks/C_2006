@@ -160,8 +160,10 @@ export default  {
   created() {
     const postsRef = firebase.database().ref('posts')
     postsRef.once('value').then((snapshot) => {
-      console.log(snapshot.val());
-      (this as any).posts = snapshot.val();
+      (this as any).posts = Object.entries(snapshot.val()).map(([key, value]) => ({
+        key: key,
+        text: (value as any).text
+      }));
     });
   }
 }
