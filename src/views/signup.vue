@@ -69,13 +69,12 @@ export default  {
   methods: {
     signup(name: string, email: string, passwd: string): void {
       firebase.auth().createUserWithEmailAndPassword(email, passwd)
-        .then(() => {
-          const user = firebase.auth().currentUser;
-          if(user === null) {
-            console.log('user not found!');
-            return
+        .then((result) => {
+          // to solve error "object is possibly 'null'"
+          if(result.user === null) {
+            return;
           }
-          user.updateProfile({
+          result.user.updateProfile({
             displayName: name
           }).then(() => {
             (this as any).$router.push('/signin');
