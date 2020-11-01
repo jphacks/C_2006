@@ -69,7 +69,8 @@
           <ion-icon slot="start" :icon="searchOutline"></ion-icon>
           Search
         </ion-button>
-
+        
+        {{ posts }}
       </div>
       <!-- success get posts -->
       <div v-else class="result">
@@ -159,7 +160,8 @@ export default  {
   created() {
     const postsRef = firebase.database().ref('posts')
     postsRef.once('value').then((snapshot) => {
-      console.log(snapshot.val())
+      console.log(snapshot.val());
+      (this as any).posts = snapshot.val();
     });
   }
 }
