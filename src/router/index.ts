@@ -11,6 +11,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: Tabs,
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -44,11 +45,13 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/signin',
-    component: () => import('@/views/signin.vue')
+    component: () => import('@/views/signin.vue'),
+    meta: { requiresAuth: false }
   },
   {
     path: '/signup',
-    component: () => import('@/views/signup.vue')
+    component: () => import('@/views/signup.vue'),
+    meta: { requiresAuth: false }
   }
 ]
 
