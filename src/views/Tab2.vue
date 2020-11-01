@@ -72,7 +72,7 @@
       </div>
       <!-- success get posts -->
       <div v-else class="result">
-        <post-container />
+        <post-container @postid="toDetailView"/>
       </div>
       
       
@@ -83,6 +83,7 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonIcon, IonButton, loadingController, toastController } from '@ionic/vue';
 import { searchOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline } from 'ionicons/icons';
+import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 import firebase from 'firebase';
 
@@ -97,6 +98,7 @@ export default  {
       peopleOutline,
       folderOutline,
       isSearch: true,
+      router: useRouter()
     }
   },
   data() {
@@ -154,6 +156,9 @@ export default  {
         })
       return toast.present();
     },*/
+    toDetailView(id: string) {
+      (this as any).router.push(`/post/${id}`);
+    }
   }
 }
 </script>

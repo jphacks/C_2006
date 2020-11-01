@@ -2,7 +2,7 @@
   <ion-grid>
     <ion-row>
       <ion-col v-for="post in posts"  :key="post.id" size="4">
-        <img src="../../public/assets/icon/icon.png" alt="picture" @click="toDetailView(post.id)">
+        <img src="../../public/assets/icon/icon.png" alt="picture" @click="$emit('postid',post.id)">
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -10,15 +10,9 @@
 
 <script lang="ts">
 import { IonCol, IonGrid, IonRow } from '@ionic/vue';
-import { useRouter } from 'vue-router';
 
 export default {
   components: { IonCol, IonGrid, IonRow },
-  setup() {
-    return{
-      router: useRouter()
-    }
-  },
   data() {
     return {
       posts:[
@@ -37,11 +31,7 @@ export default {
       ]
     }
   },
-  methods: {
-    toDetailView(id: string) {
-      (this as any).router.push(`/post/${id}`);
-    }
-  }
+  emits: ['postid']
 }
 </script>
 
