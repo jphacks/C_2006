@@ -131,6 +131,9 @@ export default {
     },
     async upload(event: any) {
       const files = event.target.files || event.dataTransfer.files
+      if(files.length === 0){
+        return;
+      }
       const file = files[0]
       if (this.checkFile(file)) {
         (this as any).newPost.image  = await (this as any).getBase64(file)
