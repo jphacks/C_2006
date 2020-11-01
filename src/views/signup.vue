@@ -69,8 +69,12 @@ export default  {
   methods: {
     signup(name: string, email: string, passwd: string): void {
       firebase.auth().createUserWithEmailAndPassword(email, passwd)
-        .then((user: any) => {
-          console.log(user)
+        .then(() => {
+          const user = firebase.auth().currentUser;
+          if(user === null) {
+            console.log('user not found!');
+            return
+          }
           user.updateProfile({
             displayName: name
           }).then(() => {
