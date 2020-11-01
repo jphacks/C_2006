@@ -69,6 +69,8 @@
           <ion-icon slot="start" :icon="searchOutline"></ion-icon>
           Search
         </ion-button>
+        
+        {{ posts }}
       </div>
       <!-- success get posts -->
       <div v-else class="result">
@@ -154,6 +156,15 @@ export default  {
         })
       return toast.present();
     },*/
+  },
+  created() {
+    const postsRef = firebase.database().ref('posts')
+    postsRef.once('value').then((snapshot) => {
+      (this as any).posts = Object.entries(snapshot.val()).map(([key, value]) => ({
+        key: key,
+        text: (value as any).text
+      }));
+    });
   }
 }
 </script>
