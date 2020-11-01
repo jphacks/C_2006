@@ -78,10 +78,11 @@
           <ion-icon slot="start" :icon="pushOutline"></ion-icon>
           Upload Your Post
         </ion-button>
-      </div>
 
-      
-      
+        <ion-button @click="sendPost()">
+          send
+        </ion-button>
+      </div>
 
     </ion-content>
   </ion-page>
@@ -119,15 +120,20 @@ export default {
   data() {
     const newPost: PostData = {image: undefined,text: '', tags: {cost: '', with: '', genre: '', time: ''}}
     return {
-      newPost
+      newPost,
+      samplePost: {
+        text: 'hogehogehogehoge',
+        tags: {cost: '1000-5000円', with: '友達と', genre: 'Cook', time: '0-1h'},
+      }
     }
   },
   methods: {
     sendPost() {
-      firebase.database().ref('posts').push({
-        text: "fugafuga",
-      });
-      console.log('send!');
+      firebase.database().ref('posts').push((this as any).samplePost)
+        .then(() => {
+          console.log('send!');
+          (this as any).$router.push('/')
+        });
     },
     async upload(event: any) {
       const files = event.target.files || event.dataTransfer.files
