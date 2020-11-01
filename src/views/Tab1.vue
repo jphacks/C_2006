@@ -12,17 +12,28 @@
         </ion-toolbar>
       </ion-header>
     
-      <post-container/>
+      <post-container @postid="toDetailView"/>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 
 export default  {
   name: 'Tab1',
-  components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
+  setup() {
+    return {
+      router: useRouter()
+    }
+  },
+  methods: {
+    toDetailView(id: string) {
+      (this as any).router.push(`/post/${id}`);
+    }
+  }
 }
 </script>
