@@ -13,11 +13,12 @@
       </ion-header>
 
       <div class="image-wrapper">
-        <img src="../../public/assets/noimage.svg" alt="image">
-        <ion-label class="btn-wrapper" for="fileUpload">
+        <img v-if="newPost.image" :src="newPost.image" alt="image">
+        <img v-else src="../../public/assets/noimage.svg" alt="image">
+        <label for="fileUpload" class="btn-wrapper" >
           <ion-fab-button  class="upload-btn"><ion-icon :icon="imageOutline"></ion-icon></ion-fab-button>
-          <ion-input id="fileUpload" type="file"></ion-input>
-        </ion-label>
+          <input id="fileUpload" type="file" @change="upload">
+        </label>
       </div>
 
       <div class="post-wrapper">
@@ -88,31 +89,37 @@
 
 <script lang="ts">
 import firebase from 'firebase';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton } from '@ionic/vue';
 import { imageOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline, pushOutline } from 'ionicons/icons';
 
+interface PostData{
+  image: unknown;
+  text: string;
+  tags: {
+    cost: string;
+    with: string;
+    genre: string;
+    time: string;
+  };
+}
 
 export default {
   name: 'Tab1',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonInput, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton },
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton },
   setup() {
     return {
-      newPost: {
-        image: '',
-        text: '',
-        tags: {
-          cost: '',
-          with: '',
-          genre: '',
-          time: '',
-        }
-      },
       imageOutline,
       cashOutline,
       hourglassOutline,
       peopleOutline,
       folderOutline,
-      pushOutline
+      pushOutline,
+    }
+  },
+  data() {
+    const newPost: PostData = {image: undefined,text: '', tags: {cost: '', with: '', genre: '', time: ''}}
+    return {
+      newPost
     }
   },
   methods: {
@@ -121,6 +128,38 @@ export default {
         text: "fugafuga",
       });
       console.log('send!');
+    },
+    async upload(event: any) {
+      const files = event.target.files || event.dataTransfer.files
+      const file = files[0]
+      if (this.checkFile(file)) {
+        (this as any).newPost.image  = await (this as any).getBase64(file)
+      }
+    },
+    getBase64(file: any){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = error => reject(error)
+      })
+    },
+    checkFile(file: any) {
+      let result = true
+      const SIZE_LIMIT = 5000000 // 5MB
+      // キャンセルしたら処理中断
+      if (!file) {
+        result = false
+      }
+      // jpeg か png 関連ファイル以外は受付けない
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+        result = false
+      }
+      // 上限サイズより大きければ受付けない
+      if (file.size > SIZE_LIMIT) {
+        result = false
+      }
+      return result
     }
   }
 }
