@@ -18,16 +18,16 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">email</ion-label>
-              <ion-input placeholder="email" type="email"></ion-input>
+              <ion-input placeholder="email" type="email" v-model="name"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="stacked">password</ion-label>
-              <ion-input placeholder="password" type="password"></ion-input>
+              <ion-input placeholder="password" type="password" v-model="passwd"></ion-input>
             </ion-item>
           </ion-list>
 
-          <ion-button class="signin">
+          <ion-button class="signin" @click="signin(name, passwd)">
             <ion-icon slot="start" :icon="logInOutline"></ion-icon>
             Signin
           </ion-button>
@@ -48,6 +48,7 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
 import { personAddOutline, logInOutline } from 'ionicons/icons';
+import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
@@ -55,7 +56,21 @@ export default  {
   setup() {
     return {
       personAddOutline,
-      logInOutline
+      logInOutline,
+      name: '',
+      passwd: '',
+    }
+  },
+  methods: {
+    signin(name: string, passwd: string): void {
+      firebase.auth().signInWithEmailAndPassword(name, passwd).then(
+        (user) => {
+          console.log(user);
+        },
+        (error) => {
+          console.error(error);
+        }
+        );
     }
   }
 }
