@@ -43,9 +43,9 @@
         </div>
 
     
-        <ion-button class="logout">
+        <ion-button class="signout" @click="signout()">
           <ion-icon slot="start" :icon="logOutOutline"></ion-icon>
-          Logout
+          Signout
         </ion-button>
       </div>
       
@@ -57,6 +57,7 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
 import { logOutOutline, checkmarkOutline } from 'ionicons/icons';
+import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
@@ -65,6 +66,13 @@ export default  {
     return {
       logOutOutline,
       checkmarkOutline
+    }
+  },
+  methods: {
+    signout() {
+      firebase.auth().signOut().then(() => {
+        (this as any).$router.push('/signin')
+      });
     }
   }
 }
@@ -80,7 +88,7 @@ export default  {
 .update{
   margin-top: 30px;
 }
-.logout{
+.signout{
   margin-top: 100px;
 }
 </style>

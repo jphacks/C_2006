@@ -18,7 +18,7 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">name</ion-label>
-              <ion-input placeholder="name" type="text"></ion-input>
+              <ion-input placeholder="name" type="text" v-model="name"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -28,16 +28,15 @@
 
             <ion-item>
               <ion-label position="stacked">password</ion-label>
-              <ion-input placeholder="password" type="password"></ion-input>
+              <ion-input placeholder="password" type="password" v-model="passwd"></ion-input>
             </ion-item>
           </ion-list>
 
-          <ion-button class="signup">
+          <ion-button class="signup" @click="signup(name, passwd)">
             <ion-icon slot="start" :icon="personAddOutline"></ion-icon>
             Signup
           </ion-button>
         </div>
-
     
         <ion-button class="signin" href="/signin">
           <ion-icon slot="start" :icon="logInOutline"></ion-icon>
@@ -53,6 +52,7 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
 import { personAddOutline, logInOutline } from 'ionicons/icons';
+import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
@@ -60,7 +60,21 @@ export default  {
   setup() {
     return {
       personAddOutline,
-      logInOutline
+      logInOutline,
+      name: '',
+      passwd: '',
+    }
+  },
+  methods: {
+    signup(name: string, passwd: string): void {
+      firebase.auth().createUserWithEmailAndPassword(name, passwd)
+        .then((user: any) => {
+          console.log(user.email);
+          (this as any).$router.push('/signin');
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }
 }
