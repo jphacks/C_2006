@@ -68,10 +68,14 @@ export default  {
   },
   methods: {
     signup(name: string, email: string, passwd: string): void {
-      firebase.auth().createUserWithEmailAndPassword(name, passwd)
+      firebase.auth().createUserWithEmailAndPassword(email, passwd)
         .then((user: any) => {
-          console.log(user.email);
-          (this as any).$router.push('/signin');
+          console.log(user)
+          user.updateProfile({
+            displayName: name
+          }).then(() => {
+            (this as any).$router.push('/signin');
+          })
         })
         .catch(error => {
           console.error(error);
