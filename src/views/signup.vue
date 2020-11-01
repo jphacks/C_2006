@@ -23,7 +23,7 @@
 
             <ion-item>
               <ion-label position="stacked">email</ion-label>
-              <ion-input placeholder="email" type="email"></ion-input>
+              <ion-input placeholder="email" type="email" v-model="email"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -32,7 +32,7 @@
             </ion-item>
           </ion-list>
 
-          <ion-button class="signup" @click="signup(name, passwd)">
+          <ion-button class="signup" @click="signup(name, email, passwd)">
             <ion-icon slot="start" :icon="personAddOutline"></ion-icon>
             Signup
           </ion-button>
@@ -62,11 +62,12 @@ export default  {
       personAddOutline,
       logInOutline,
       name: '',
+      email: '',
       passwd: '',
     }
   },
   methods: {
-    signup(name: string, passwd: string): void {
+    signup(name: string, email: string, passwd: string): void {
       firebase.auth().createUserWithEmailAndPassword(name, passwd)
         .then((user: any) => {
           console.log(user.email);
