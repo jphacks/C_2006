@@ -69,11 +69,12 @@ export default  {
     signup(name: string, passwd: string): void {
       firebase.auth().createUserWithEmailAndPassword(name, passwd)
         .then((user: any) => {
-          console.log(user.email)
+          console.log(user.email);
+          (this as any).$router.push('/signin');
         })
         .catch(error => {
-          console.error(error)
-        })
+          console.error(error);
+        });
     }
   }
 }

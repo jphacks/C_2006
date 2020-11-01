@@ -66,12 +66,12 @@ export default  {
       firebase.auth().signInWithEmailAndPassword(name, passwd).then(
         (user) => {
           console.log(user);
-          (this as any).$router.push('/')
+          (this as any).$router.push('/');
         },
         (error) => {
           console.error(error);
         }
-        );
+      );
     }
   }
 }
