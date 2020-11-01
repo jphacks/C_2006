@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import Tabs from '../views/Tabs.vue'
+import Tabs from '../views/Tabs.vue';
+import firebase from "firebase";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -54,6 +55,24 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  if (requiresAuth) {
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        next();
+      } else {
+        next({
+          path: '/signin',
+          query: { redirect: to.fullPath }
+        });
+      }
+    });
+  } else {
+    next();
+  }
 })
 
 export default router
