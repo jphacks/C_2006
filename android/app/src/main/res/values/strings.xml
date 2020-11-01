@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">C_2006</string>
-    <string name="title_activity_main">C_2006</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">Fulfill</string>
+    <string name="title_activity_main">Fulfill</string>
+    <string name="package_name">com.fulfill</string>
+    <string name="custom_url_scheme">com.fulfill</string>
 </resources>
