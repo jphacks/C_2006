@@ -30,6 +30,12 @@
         <ion-label>Play</ion-label>
       </ion-chip>
 
+      
+      <ion-button>
+        <ion-icon :icon="bookmarkOutline"></ion-icon>
+      </ion-button>
+      
+
       <p>
         hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
         hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
@@ -42,18 +48,19 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel } from '@ionic/vue';
-import { cashOutline, hourglassOutline, peopleOutline, folderOutline } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton } from '@ionic/vue';
+import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline } from 'ionicons/icons';
 
 export default  {
   name: 'Tab2',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonChip, IonIcon, IonLabel },
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonChip, IonIcon, IonLabel, IonButton },
   setup() {
     return {
       cashOutline,
       hourglassOutline,
       peopleOutline,
       folderOutline,
+      bookmarkOutline
     }
   },
 }
