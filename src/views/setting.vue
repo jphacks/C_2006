@@ -15,31 +15,21 @@
       <div class="wrapper">
         <div class="forms">
           <ion-list>
-            <ion-item>
-              <ion-label position="stacked">name</ion-label>
-              <ion-input placeholder="name" type="text" v-model="userData.displayName"></ion-input>
+            <ion-item href="/edit/name">
+              <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
+              <ion-label>name</ion-label>
             </ion-item>
 
-            <ion-item>
-              <ion-label position="stacked">email</ion-label>
-              <ion-input placeholder="email" type="email" v-model="userData.email"></ion-input>
+            <ion-item href="/edit/email">
+              <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
+              <ion-label>email</ion-label>
             </ion-item>
 
-            <ion-item>
-              <ion-label position="stacked">current Password</ion-label>
-              <ion-input placeholder="current Password" type="current-password"></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position="stacked">new Password</ion-label>
-              <ion-input placeholder="new Password" type="new-password"></ion-input>
+            <ion-item href="/edit/password">
+              <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
+              <ion-label>password</ion-label>
             </ion-item>
           </ion-list>
-
-          <ion-button class="update" @click="update()">
-            <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
-            Update
-          </ion-button>
         </div>
 
     
@@ -55,17 +45,18 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
-import { logOutOutline, checkmarkOutline } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { logOutOutline, checkmarkOutline, chevronForwardOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon },
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton, IonLabel, IonItem, IonList, IonIcon },
   setup() {
     return {
       logOutOutline,
       checkmarkOutline,
+      chevronForwardOutline,
       originalUserData: {},
       userData: {
         displayName: '',
