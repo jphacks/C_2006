@@ -13,8 +13,10 @@
       </ion-header>
 
       <div class="image-wrapper">
-        <img v-if="newPost.image" :src="newPost.image" alt="image">
-        <img v-else src="../../public/assets/noimage.svg" alt="image">
+        <div class="square">
+          <img v-if="newPost.image" :src="newPost.image" alt="image" class="upload-img">
+          <img v-else src="../../public/assets/noimage.svg" alt="image" class="upload-img">
+        </div>
         <label for="fileUpload" class="btn-wrapper" >
           <ion-fab-button  class="upload-btn"><ion-icon :icon="imageOutline"></ion-icon></ion-fab-button>
           <input id="fileUpload" type="file" @change="upload">
@@ -176,6 +178,16 @@ export default {
 <style scoped>
 .image-wrapper{
   position: relative;
+}
+
+.square{
+  width: 100%;
+}
+
+.upload-img{
+  width: 100vmin;
+  height: 100vmin;
+  object-fit: contain;
 }
 
 .btn-wrapper{
