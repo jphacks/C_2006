@@ -70,7 +70,6 @@ export default  {
     }
   },
   created() {
-    console.log(firebase.auth().currentUser);
     (this as any).user = firebase.auth().currentUser;
   },
   methods: {
