@@ -18,7 +18,7 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">email</ion-label>
-              <ion-input placeholder="email" type="email" v-model="name"></ion-input>
+              <ion-input placeholder="email" type="email" v-model="email"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -27,7 +27,7 @@
             </ion-item>
           </ion-list>
 
-          <ion-button class="signin" @click="signin(name, passwd)">
+          <ion-button class="signin" @click="signin(email, passwd)">
             <ion-icon slot="start" :icon="logInOutline"></ion-icon>
             Signin
           </ion-button>
@@ -57,13 +57,13 @@ export default  {
     return {
       personAddOutline,
       logInOutline,
-      name: '',
+      email: '',
       passwd: '',
     }
   },
   methods: {
-    signin(name: string, passwd: string): void {
-      firebase.auth().signInWithEmailAndPassword(name, passwd).then(
+    signin(email: string, passwd: string): void {
+      firebase.auth().signInWithEmailAndPassword(email, passwd).then(
         (user) => {
           console.log(user);
           (this as any).$router.push('/');
