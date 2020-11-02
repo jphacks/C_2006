@@ -17,12 +17,12 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">name</ion-label>
-              <ion-input placeholder="name" type="text"></ion-input>
+              <ion-input placeholder="name" type="text" v-model="userData.displayName"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="stacked">email</ion-label>
-              <ion-input placeholder="email" type="email"></ion-input>
+              <ion-input placeholder="email" type="email" v-model="userData.email"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -36,7 +36,7 @@
             </ion-item>
           </ion-list>
 
-          <ion-button class="update">
+          <ion-button class="update" @click="update()">
             <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
             Update
           </ion-button>
@@ -65,13 +65,50 @@ export default  {
   setup() {
     return {
       logOutOutline,
-      checkmarkOutline
+      checkmarkOutline,
+      originalUserData: {},
+      userData: {
+        displayName: '',
+        email: '',
+      },
     }
   },
+  created() {
+    (this as any).originalUserData = firebase.auth().currentUser;
+    (this as any).userData.displayName = (this as any).originalUserData.displayName;
+    (this as any).userData.email = (this as any).originalUserData.email;
+  },
   methods: {
+    update() {
+      const originalUserData = (this as any).originalUserData;
+      const userData = (this as any).userData;
+
+      if(!originalUserData) {
+        return;
+      }
+      // update displayName
+      if(userData.displayName !== originalUserData.displayName) {
+        originalUserData.updateProfile({
+          displayName: userData.displayName,
+        }).then(() => {
+          console.log('displayName updated!');
+        }).catch((error: any) => {
+          console.error(error);
+        });
+      }
+      // update email
+      // **in progress!**
+      if(userData.email !== originalUserData.email) {
+        originalUserData.updateEmail(userData.email).then(() => {
+          console.log('email updated!');
+        }).catch((error: any) => {
+          console.error(error);
+        });
+      }
+    },
     signout() {
       firebase.auth().signOut().then(() => {
-        (this as any).$router.push('/signin')
+        (this as any).$router.push('/signin');
       });
     }
   }
