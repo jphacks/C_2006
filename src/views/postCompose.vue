@@ -74,13 +74,9 @@
         <ion-label>Notes</ion-label>
         <ion-textarea rows="6" cols="20" placeholder="Enter any notes here..."  v-model="newPost.text"></ion-textarea>
 
-        <ion-button>
+        <ion-button @click="sendPost()">
           <ion-icon slot="start" :icon="pushOutline"></ion-icon>
           Upload Your Post
-        </ion-button>
-
-        <ion-button @click="sendPost()">
-          send
         </ion-button>
       </div>
 
