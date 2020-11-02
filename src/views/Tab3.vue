@@ -23,7 +23,7 @@
         <post-container @postid="toDetailView"/>
 
         <ion-fab class="fab-btn">
-          <ion-fab-button color="danger" href="/compose">
+          <ion-fab-button href="/compose">
             <ion-icon :icon="add"></ion-icon>
           </ion-fab-button>
         </ion-fab>
