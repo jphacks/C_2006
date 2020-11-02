@@ -17,12 +17,12 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">name</ion-label>
-              <ion-input placeholder="name" type="text" v-model="user.displayName"></ion-input>
+              <ion-input placeholder="name" type="text" v-model="userData.displayName"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="stacked">email</ion-label>
-              <ion-input placeholder="email" type="email" v-model="user.email"></ion-input>
+              <ion-input placeholder="email" type="email" v-model="userData.email"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -66,15 +66,36 @@ export default  {
     return {
       logOutOutline,
       checkmarkOutline,
-      user: {},
+      originalUserData: {},
+      userData: {
+        displayName: '',
+        email: '',
+      },
     }
   },
   created() {
-    (this as any).user = firebase.auth().currentUser;
+    (this as any).originalUserData = firebase.auth().currentUser;
+    (this as any).userData.displayName = (this as any).originalUserData.displayName;
+    (this as any).userData.email = (this as any).originalUserData.email;
   },
   methods: {
     update() {
-      console.log('update');
+      const originalUserData = (this as any).originalUserData;
+      const userData = (this as any).userData;
+
+      if(!originalUserData) {
+        return;
+      }
+      
+      if(userData.displayName !== originalUserData.displayName) {
+        originalUserData.updateProfile({
+          displayName: userData.displayName,
+        }).then(() => {
+          console.log('displayName updated!');
+        }).catch((error: any) => {
+          console.error(error);
+        });
+      }
     },
     signout() {
       firebase.auth().signOut().then(() => {
