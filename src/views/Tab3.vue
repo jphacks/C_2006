@@ -20,10 +20,10 @@
           </ion-button>
         </div>
 
-        <post-container/>
+        <post-container @postid="toDetailView"/>
 
         <ion-fab class="fab-btn">
-          <ion-fab-button color="danger" href="/compose">
+          <ion-fab-button href="/compose">
             <ion-icon :icon="add"></ion-icon>
           </ion-fab-button>
         </ion-fab>
@@ -35,6 +35,7 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
 import { settingsOutline, add } from 'ionicons/icons';
+import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 
 export default  {
@@ -43,7 +44,13 @@ export default  {
   setup() {
     return {
       settingsOutline,
-      add
+      add,
+      router: useRouter()
+    }
+  },
+  methods: {
+    toDetailView(id: string) {
+      (this as any).router.push(`/post/${id}`);
     }
   }
 }
