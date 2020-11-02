@@ -15,17 +15,17 @@
       <div class="wrapper">
         <div class="forms">
           <ion-list>
-            <ion-item href="/edit/name">
+            <ion-item @click="toEditName()">
               <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
               <ion-label>name</ion-label>
             </ion-item>
 
-            <ion-item href="/edit/email">
+            <ion-item @click="toEditEmail()">
               <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
               <ion-label>email</ion-label>
             </ion-item>
 
-            <ion-item href="/edit/password">
+            <ion-item @click="toEditPassword()">
               <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
               <ion-label>password</ion-label>
             </ion-item>
@@ -101,6 +101,15 @@ export default  {
       firebase.auth().signOut().then(() => {
         (this as any).$router.push('/signin');
       });
+    },
+    toEditName() {
+      (this as any).$router.push('/edit/name');
+    },
+    toEditEmail() {
+      (this as any).$router.push('/edit/email');
+    },
+    toEditPassword() {
+      (this as any).$router.push('/edit/password');
     }
   }
 }
