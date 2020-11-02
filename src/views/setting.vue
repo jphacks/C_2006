@@ -86,7 +86,7 @@ export default  {
       if(!originalUserData) {
         return;
       }
-      
+      // update displayName
       if(userData.displayName !== originalUserData.displayName) {
         originalUserData.updateProfile({
           displayName: userData.displayName,
@@ -96,10 +96,18 @@ export default  {
           console.error(error);
         });
       }
+      // update email
+      if(userData.email !== originalUserData.email) {
+        originalUserData.updateEmail(userData.email).then(() => {
+          console.log('email updated!');
+        }).catch((error: any) => {
+          console.error(error);
+        });
+      }
     },
     signout() {
       firebase.auth().signOut().then(() => {
-        (this as any).$router.push('/signin')
+        (this as any).$router.push('/signin');
       });
     }
   }
