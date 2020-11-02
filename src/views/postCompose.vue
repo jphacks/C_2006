@@ -26,7 +26,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
             <ion-label>Cost</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="newPost.tags.cost">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-1000">0-1000円</ion-select-option>
               <ion-select-option value="5000">1000-5000円</ion-select-option>
@@ -38,7 +38,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
             <ion-label>With</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="newPost.tags.with">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="alone">1人で</ion-select-option>
               <ion-select-option value="friend">友達と</ion-select-option>
@@ -50,7 +50,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="hourglassOutline"></ion-icon>
             <ion-label>Time</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="newPost.tags.time">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-hour">0-1h</ion-select-option>
               <ion-select-option value="3hours">1-3h</ion-select-option>
@@ -62,7 +62,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="folderOutline"></ion-icon>
             <ion-label>Genre</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="newPost.tags.genre">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="cook">Cook</ion-select-option>
               <ion-select-option value="play">Play</ion-select-option>
@@ -72,16 +72,13 @@
         </ion-list>
 
         <ion-label>Notes</ion-label>
-        <ion-textarea rows="6" cols="20" placeholder="Enter any notes here..."></ion-textarea>
+        <ion-textarea rows="6" cols="20" placeholder="Enter any notes here..."  v-model="newPost.text"></ion-textarea>
 
-        <ion-button>
+        <ion-button @click="sendPost()">
           <ion-icon slot="start" :icon="pushOutline"></ion-icon>
           Upload Your Post
         </ion-button>
       </div>
-
-      
-      
 
     </ion-content>
   </ion-page>
@@ -119,15 +116,23 @@ export default {
   data() {
     const newPost: PostData = {image: undefined,text: '', tags: {cost: '', with: '', genre: '', time: ''}}
     return {
-      newPost
+      newPost,
+      samplePost: {
+        text: 'hogehogehogehoge',
+        tags: {cost: '1000-5000円', with: '友達と', genre: 'Cook', time: '0-1h'},
+      }
     }
   },
   methods: {
     sendPost() {
-      firebase.database().ref('posts').push({
-        text: "fugafuga",
-      });
-      console.log('send!');
+      // Resolve firebase rejecting undefined
+      (this as any).newPost.image = '';
+      
+      firebase.database().ref('posts').push((this as any).newPost)
+        .then(() => {
+          console.log('send!');
+          (this as any).$router.push('/')
+        });
     },
     async upload(event: any) {
       const files = event.target.files || event.dataTransfer.files
