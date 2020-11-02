@@ -17,12 +17,12 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">name</ion-label>
-              <ion-input placeholder="name" type="text"></ion-input>
+              <ion-input placeholder="name" type="text" v-model="user.displayName"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="stacked">email</ion-label>
-              <ion-input placeholder="email" type="email"></ion-input>
+              <ion-input placeholder="email" type="email" v-model="user.email"></ion-input>
             </ion-item>
 
             <ion-item>
@@ -36,7 +36,7 @@
             </ion-item>
           </ion-list>
 
-          <ion-button class="update">
+          <ion-button class="update" @click="update()">
             <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
             Update
           </ion-button>
@@ -65,10 +65,18 @@ export default  {
   setup() {
     return {
       logOutOutline,
-      checkmarkOutline
+      checkmarkOutline,
+      user: {},
     }
   },
+  created() {
+    console.log(firebase.auth().currentUser);
+    (this as any).user = firebase.auth().currentUser;
+  },
   methods: {
+    update() {
+      console.log('update');
+    },
     signout() {
       firebase.auth().signOut().then(() => {
         (this as any).$router.push('/signin')
