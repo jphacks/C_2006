@@ -97,6 +97,7 @@ export default  {
         });
       }
       // update email
+      // **in progress!**
       if(userData.email !== originalUserData.email) {
         originalUserData.updateEmail(userData.email).then(() => {
           console.log('email updated!');
