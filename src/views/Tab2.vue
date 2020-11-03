@@ -64,9 +64,9 @@
           </ion-item>
         </ion-list>
 
-        <ion-button>
+        <ion-button @click="search()">
         <!--<ion-button @click="getPosts()">-->
-          <ion-icon slot="start" :icon="searchOutline" @click="search()"></ion-icon>
+          <ion-icon slot="start" :icon="searchOutline"></ion-icon>
           Search
         </ion-button>
         
@@ -101,16 +101,16 @@ export default  {
       folderOutline,
       isSearch: true,
       router: useRouter(),
+    }
+  },
+  data() {
+    return {
       tags: {
         cost: '',
         genre: '',
         time: '',
         with: '',
-      }
-    }
-  },
-  data() {
-    return {
+      },
       posts: [] as any
     }
   },
@@ -165,7 +165,12 @@ export default  {
       return toast.present();
     },*/
     search() {
-      console.log((this as any).tags);
+      // for(let key of Object.keys((this as any).tags)) {
+
+      // }
+      const postsRef = firebase.database().ref('posts');
+      const data = postsRef.orderByChild('tags/cost').equalTo('5000').limitToLast(10).once('value');
+      console.log(data);
     },
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
