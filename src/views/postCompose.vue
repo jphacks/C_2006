@@ -131,7 +131,7 @@ export default {
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
           (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
           var updateData:{[index: string]:any} = {};
-          updateData['/posts/' + key] = (this as any).newPost;
+          updateData[key] = (this as any).newPost;
           firebase.database().ref('posts').update(updateData)
             .then(() => {
               (this as any).$router.push('/');
