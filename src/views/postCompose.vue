@@ -130,7 +130,7 @@ export default {
           console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
           (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
-          var updateData:{[index: string]:any} = {};
+          const updateData: {[index: string]: any} = {};
           updateData[key] = (this as any).newPost;
           firebase.database().ref('posts').update(updateData)
             .then(() => {
