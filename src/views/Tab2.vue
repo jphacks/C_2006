@@ -19,7 +19,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
             <ion-label>Cost</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="tags.cost">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-1000">0-1000円</ion-select-option>
               <ion-select-option value="5000">1000-5000円</ion-select-option>
@@ -31,7 +31,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
             <ion-label>With</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="tags.with">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="alone">1人で</ion-select-option>
               <ion-select-option value="friend">友達と</ion-select-option>
@@ -43,7 +43,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="hourglassOutline"></ion-icon>
             <ion-label>Time</ion-label>
-            <ion-select value="all">
+            <ion-select value="all"  v-model="tags.time">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-hour">0-1h</ion-select-option>
               <ion-select-option value="3hours">1-3h</ion-select-option>
@@ -55,7 +55,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="folderOutline"></ion-icon>
             <ion-label>Genre</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="tags.genre">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="cook">Cook</ion-select-option>
               <ion-select-option value="play">Play</ion-select-option>
@@ -66,7 +66,7 @@
 
         <ion-button>
         <!--<ion-button @click="getPosts()">-->
-          <ion-icon slot="start" :icon="searchOutline"></ion-icon>
+          <ion-icon slot="start" :icon="searchOutline" @click="search()"></ion-icon>
           Search
         </ion-button>
         
@@ -100,7 +100,13 @@ export default  {
       peopleOutline,
       folderOutline,
       isSearch: true,
-      router: useRouter()
+      router: useRouter(),
+      tags: {
+        cost: '',
+        genre: '',
+        time: '',
+        with: '',
+      }
     }
   },
   data() {
@@ -158,12 +164,15 @@ export default  {
         })
       return toast.present();
     },*/
+    search() {
+      console.log((this as any).tags);
+    },
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
     }
   },
   created() {
-    const postsRef = firebase.database().ref('posts')
+    const postsRef = firebase.database().ref('posts');
     postsRef.orderByChild('composedAt').limitToLast(10).once('value').then((snapshot) => {
       (this as any).posts = Object.entries(snapshot.val()).map(([key, value]) => ({
         key: key,
