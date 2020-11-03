@@ -97,15 +97,6 @@ export default  {
         console.log(error)
       });
 
-      
-        // User re-authenticated.
-      
-      
-    },
-    signout() {
-      firebase.auth().signOut().then(() => {
-        (this as any).$router.push('/signin');
-      });
     },
     backSetting() {
       (this as any).$router.push('/setting');
