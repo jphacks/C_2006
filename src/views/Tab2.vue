@@ -19,7 +19,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
             <ion-label>Cost</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="tags.cost">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-1000">0-1000円</ion-select-option>
               <ion-select-option value="5000">1000-5000円</ion-select-option>
@@ -31,7 +31,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
             <ion-label>With</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="tags.with">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="alone">1人で</ion-select-option>
               <ion-select-option value="friend">友達と</ion-select-option>
@@ -43,7 +43,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="hourglassOutline"></ion-icon>
             <ion-label>Time</ion-label>
-            <ion-select value="all">
+            <ion-select value="all"  v-model="tags.time">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-hour">0-1h</ion-select-option>
               <ion-select-option value="3hours">1-3h</ion-select-option>
@@ -55,7 +55,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="folderOutline"></ion-icon>
             <ion-label>Genre</ion-label>
-            <ion-select value="all">
+            <ion-select value="all" v-model="tags.genre">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="cook">Cook</ion-select-option>
               <ion-select-option value="play">Play</ion-select-option>
@@ -64,7 +64,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-button>
+        <ion-button @click="search()">
         <!--<ion-button @click="getPosts()">-->
           <ion-icon slot="start" :icon="searchOutline"></ion-icon>
           Search
@@ -100,11 +100,17 @@ export default  {
       peopleOutline,
       folderOutline,
       isSearch: true,
-      router: useRouter()
+      router: useRouter(),
     }
   },
   data() {
     return {
+      tags: {
+        cost: 'all',
+        genre: 'all',
+        time: 'all',
+        with: 'all',
+      },
       posts: [] as any
     }
   },
@@ -158,19 +164,46 @@ export default  {
         })
       return toast.present();
     },*/
+    search() {
+      for(const key of Object.keys((this as any).tags)) {
+        if((this as any).tags[key] !== 'all') {
+          (this as any).posts = (this as any).posts.filter((post: any) => {
+            return post.tags[key] === (this as any).tags[key];
+          });
+        }
+      }
+
+      // solution with firebase
+      //
+      // const postsRef = firebase.database().ref('posts');
+      // postsRef.orderByChild('tags/cost')
+      //   .equalTo((this as any).tags.cost)
+      //   .limitToLast(10)
+      //   .once('value')
+      //   .then((snapshot) => {
+      //     (this as any).storeInPosts(snapshot.val());
+      //   });
+    },
+    storeInPosts(data: object) {
+      (this as any).posts = Object.entries(data).map(([key, value]) => ({
+        key: key,
+        composedAt: (value as any).composedAt,
+        imageUrl: (value as any).imageUrl,
+        tags: (value as any).tags,
+        text: (value as any).text,
+      }));
+    },
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
     }
   },
   created() {
-    const postsRef = firebase.database().ref('posts')
-    postsRef.once('value').then((snapshot) => {
-      (this as any).posts = Object.entries(snapshot.val()).map(([key, value]) => ({
-        key: key,
-        image: (value as any).image,
-        tags: (value as any).tags,
-        text: (value as any).text,
-      }));
+    const postsRef = firebase.database().ref('posts');
+    postsRef.orderByChild('composedAt')
+      .limitToLast(10)
+      .once('value')
+      .then((snapshot) => {
+      (this as any).storeInPosts(snapshot.val());
     });
   }
 }
