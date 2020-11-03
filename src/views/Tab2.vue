@@ -165,17 +165,25 @@ export default  {
       return toast.present();
     },*/
     search() {
-      // for(let key of Object.keys((this as any).tags)) {
+      for(const key of Object.keys((this as any).tags)) {
+        if((this as any).tags[key] !== 'all') {
+          (this as any).posts = (this as any).posts.filter((post: any) => {
+            return post.tags[key] === (this as any).tags[key];
+          });
+        }
+      }
+      console.log((this as any).posts);
 
-      // }
-      const postsRef = firebase.database().ref('posts');
-      postsRef.orderByChild('tags/cost')
-        .equalTo((this as any).tags.cost)
-        .limitToLast(10)
-        .once('value')
-        .then((snapshot) => {
-        (this as any).storeInPosts(snapshot.val());
-      });
+      // solution with firebase
+      //
+      // const postsRef = firebase.database().ref('posts');
+      // postsRef.orderByChild('tags/cost')
+      //   .equalTo((this as any).tags.cost)
+      //   .limitToLast(10)
+      //   .once('value')
+      //   .then((snapshot) => {
+      //     (this as any).storeInPosts(snapshot.val());
+      //   });
     },
     storeInPosts(data: object) {
       (this as any).posts = Object.entries(data).map(([key, value]) => ({
