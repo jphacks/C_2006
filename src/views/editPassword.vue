@@ -18,12 +18,12 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">current Password</ion-label>
-              <ion-input placeholder="current Password" type="current-password"></ion-input>
+              <ion-input placeholder="current Password" type="password" v-model="currentPassword"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="stacked">new Password</ion-label>
-              <ion-input placeholder="new Password" type="new-password"></ion-input>
+              <ion-input placeholder="new Password" type="new-password" v-model="newPassword"></ion-input>
             </ion-item>
           </ion-list>
         </div>
@@ -58,6 +58,8 @@ export default  {
         displayName: '',
         email: '',
       },
+      currentPassword: '',
+      newPassword: ''
     }
   },
   created() {
@@ -69,33 +71,29 @@ export default  {
     update() {
       const originalUserData = (this as any).originalUserData;
       const userData = (this as any).userData;
+      const newPassword = (this as any).newPassword;
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        originalUserData.email,
+        (this as any).currentPassword
+      )
 
       if(!originalUserData) {
         return;
       }
-      // update displayName
-      if(userData.displayName !== originalUserData.displayName) {
-        originalUserData.updateProfile({
-          displayName: userData.displayName,
-        }).then(() => {
-          console.log('displayName updated!');
-        }).catch((error: any) => {
-          console.error(error);
-        });
-      }
-      // update email
-      // **in progress!**
-      if(userData.email !== originalUserData.email) {
-        originalUserData.updateEmail(userData.email).then(() => {
-          console.log('email updated!');
-        }).catch((error: any) => {
-          console.error(error);
-        });
-      }
-    },
-    signout() {
-      firebase.auth().signOut().then(() => {
-        (this as any).$router.push('/signin');
+      
+      originalUserData.reauthenticateWithCredential(credential).then(function() {
+        // User re-authenticated.
+        console.log('success')
+        if(newPassword !== originalUserData.password) {
+          originalUserData.updatePassword(newPassword).then(() => {
+            console.log('password updated!');
+          }).catch((error: any) => {
+            console.error(error);
+          });
+        }
+      }).catch(function(error: any) {
+        // An error happened.
+        console.log(error)
       });
     },
     backSetting() {
