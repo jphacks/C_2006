@@ -169,8 +169,13 @@ export default  {
 
       // }
       const postsRef = firebase.database().ref('posts');
-      const data = postsRef.orderByChild('tags/cost').equalTo('5000').limitToLast(10).once('value');
-      console.log(data);
+      postsRef.orderByChild('tags/cost')
+        .equalTo((this as any).tags.cost)
+        .limitToLast(10)
+        .once('value')
+        .then((snapshot) => {
+        (this as any).storeInPosts(snapshot.val());
+      });
     },
     storeInPosts(data: object) {
       (this as any).posts = Object.entries(data).map(([key, value]) => ({
@@ -187,7 +192,10 @@ export default  {
   },
   created() {
     const postsRef = firebase.database().ref('posts');
-    postsRef.orderByChild('composedAt').limitToLast(10).once('value').then((snapshot) => {
+    postsRef.orderByChild('composedAt')
+      .limitToLast(10)
+      .once('value')
+      .then((snapshot) => {
       (this as any).storeInPosts(snapshot.val());
     });
   }
