@@ -164,7 +164,7 @@ export default  {
   },
   created() {
     const postsRef = firebase.database().ref('posts')
-    postsRef.once('value').then((snapshot) => {
+    postsRef.orderByChild('composedAt').limitToLast(10).once('value').then((snapshot) => {
       (this as any).posts = Object.entries(snapshot.val()).map(([key, value]) => ({
         key: key,
         composedAt: (value as any).composedAt,
