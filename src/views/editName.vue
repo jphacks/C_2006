@@ -20,16 +20,11 @@
               <ion-label position="stacked">name</ion-label>
               <ion-input placeholder="name" type="text" v-model="userData.displayName"></ion-input>
             </ion-item>
-
-            <ion-item>
-              <ion-label position="stacked">password</ion-label>
-              <ion-input placeholder="password" type="password"></ion-input>
-            </ion-item>
           </ion-list>
         </div>
 
     
-        <ion-button class="update" @click="update()">
+        <ion-button class="update" @click="updateName()">
             <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
             Update
           </ion-button>
@@ -66,7 +61,7 @@ export default  {
     (this as any).userData.email = (this as any).originalUserData.email;
   },
   methods: {
-    update() {
+    updateName() {
       const originalUserData = (this as any).originalUserData;
       const userData = (this as any).userData;
 
@@ -83,20 +78,6 @@ export default  {
           console.error(error);
         });
       }
-      // update email
-      // **in progress!**
-      if(userData.email !== originalUserData.email) {
-        originalUserData.updateEmail(userData.email).then(() => {
-          console.log('email updated!');
-        }).catch((error: any) => {
-          console.error(error);
-        });
-      }
-    },
-    signout() {
-      firebase.auth().signOut().then(() => {
-        (this as any).$router.push('/signin');
-      });
     },
     backSetting() {
       (this as any).$router.push('/setting');
