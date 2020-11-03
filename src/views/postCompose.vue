@@ -123,22 +123,17 @@ export default {
   methods: {
     sendPost() {
       const storageRef = firebase.storage().ref();
-      storageRef.child('images/test.jpg').putString((this as any).uploadedImage)
-        .then((snapshot) => {
-          console.log('uploaded an image!');
+      storageRef.child('images/test.jpg').putString((this as any).uploadedImage).then(
+        (snapshot) => {
+          console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
           firebase.database().ref('posts').push((this as any).newPost)
             .then(() => {
-              (this as any).$router.push('/')
+              (this as any).$router.push('/');
             });
-        })
-        .catch((error) => {
+        },
+        (error) => {
           console.error(error);
-        });
-      // (this as any).newPost.imageUrl = '';
-      firebase.database().ref('posts').push((this as any).newPost)
-        .then(() => {
-          (this as any).$router.push('/')
         });
     },
     async upload(event: any) {
