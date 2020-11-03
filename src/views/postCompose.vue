@@ -13,7 +13,7 @@
       </ion-header>
 
       <div class="image-wrapper">    
-        <img v-if="newPost.image" :src="newPost.image" alt="image" class="upload-img">
+        <img v-if="uploadedImage" :src="uploadedImage" alt="image" class="upload-img">
         <img v-else src="../../public/assets/noimage.svg" alt="image" class="upload-img">
         <label for="fileUpload" class="btn-wrapper" >
           <ion-fab-button  class="upload-btn"><ion-icon :icon="imageOutline"></ion-icon></ion-fab-button>
@@ -90,7 +90,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel
 import { imageOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline, pushOutline } from 'ionicons/icons';
 
 interface PostData{
-  image: unknown;
+  imageUrl: string;
   text: string;
   tags: {
     cost: string;
@@ -114,19 +114,27 @@ export default {
     }
   },
   data() {
-    const newPost: PostData = {image: undefined,text: '', tags: {cost: '', with: '', genre: '', time: ''}}
+    const newPost: PostData = {imageUrl: '',text: '', tags: {cost: '', with: '', genre: '', time: ''}}
     return {
       newPost,
+      uploadedImage: undefined,
     }
   },
   methods: {
     sendPost() {
-      // Resolve firebase rejecting undefined
-      (this as any).newPost.image = '';
-      
-      firebase.database().ref('posts').push((this as any).newPost)
-        .then(() => {
-          (this as any).$router.push('/')
+      const key = firebase.database().ref('posts').push().key;
+      const storageRef = firebase.storage().ref();
+      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage).then(
+        (snapshot) => {
+          console.log(snapshot);
+          (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
+          firebase.database().ref('posts').push((this as any).newPost)
+            .then(() => {
+              (this as any).$router.push('/');
+            });
+        },
+        (error) => {
+          console.error(error);
         });
     },
     async upload(event: any) {
@@ -136,7 +144,7 @@ export default {
       }
       const file = files[0]
       if (this.checkFile(file)) {
-        (this as any).newPost.image  = await (this as any).getBase64(file)
+        (this as any).uploadedImage  = await (this as any).getBase64(file)
       }
     },
     getBase64(file: any){

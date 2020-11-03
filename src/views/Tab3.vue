@@ -14,7 +14,7 @@
 
       <div>
         <div class="userarea">
-          <h1>Username</h1>
+          <h1>{{ userName }}</h1>
           <ion-button @click="toSettingView()">
             <ion-icon :icon="settingsOutline" />
           </ion-button>
@@ -38,6 +38,8 @@ import { settingsOutline, add } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 
+import firebase from 'firebase';
+
 export default  {
   name: 'Tab3',
   components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton, IonFab, IonFabButton, IonIcon },
@@ -45,7 +47,8 @@ export default  {
     return {
       settingsOutline,
       add,
-      router: useRouter()
+      router: useRouter(),
+      userName: firebase.auth().currentUser?.displayName
     }
   },
   methods: {
