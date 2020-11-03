@@ -123,14 +123,16 @@ export default {
   },
   methods: {
     sendPost() {
-      const key = firebase.database().ref('posts').push().key;
+      const key: string = firebase.database().ref('posts').push().key!;
       const storageRef = firebase.storage().ref();
       storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage).then(
         (snapshot) => {
           console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
-          (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP
-          firebase.database().ref('posts').push((this as any).newPost)
+          (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
+          var updateData:{[index: string]:any} = {};
+          updateData['/posts/' + key] = (this as any).newPost;
+          firebase.database().ref('posts').update(updateData)
             .then(() => {
               (this as any).$router.push('/');
             });
