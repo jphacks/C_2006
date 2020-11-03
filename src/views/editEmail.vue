@@ -23,7 +23,7 @@
 
             <ion-item>
               <ion-label position="stacked">password</ion-label>
-              <ion-input placeholder="password" type="password"></ion-input>
+              <ion-input placeholder="password" type="password" v-model="password"></ion-input>
             </ion-item>
           </ion-list>
 
@@ -55,8 +55,9 @@ export default  {
       originalUserData: {},
       userData: {
         displayName: '',
-        email: '',
+        email: ''
       },
+      password: ''
     }
   },
   created() {
@@ -68,29 +69,38 @@ export default  {
     update() {
       const originalUserData = (this as any).originalUserData;
       const userData = (this as any).userData;
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        originalUserData.email,
+        (this as any).password
+      )
 
       if(!originalUserData) {
         return;
       }
-      // update displayName
-      if(userData.displayName !== originalUserData.displayName) {
-        originalUserData.updateProfile({
-          displayName: userData.displayName,
-        }).then(() => {
-          console.log('displayName updated!');
-        }).catch((error: any) => {
-          console.error(error);
-        });
-      }
+
+
       // update email
       // **in progress!**
-      if(userData.email !== originalUserData.email) {
-        originalUserData.updateEmail(userData.email).then(() => {
-          console.log('email updated!');
-        }).catch((error: any) => {
-          console.error(error);
-        });
-      }
+
+      originalUserData.reauthenticateWithCredential(credential).then(function() {
+        // User re-authenticated.
+        console.log('success')
+        if(userData.email !== originalUserData.email) {
+          originalUserData.updateEmail(userData.email).then(() => {
+            console.log('email updated!');
+          }).catch((error: any) => {
+            console.error(error);
+          });
+        }
+      }).catch(function(error: any) {
+        // An error happened.
+        console.log(error)
+      });
+
+      
+        // User re-authenticated.
+      
+      
     },
     signout() {
       firebase.auth().signOut().then(() => {
