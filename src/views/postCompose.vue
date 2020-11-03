@@ -126,15 +126,20 @@ export default {
       storageRef.child('images/test.jpg').putString((this as any).uploadedImage)
         .then((snapshot) => {
           console.log('uploaded an image!');
+          (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
+          firebase.database().ref('posts').push((this as any).newPost)
+            .then(() => {
+              (this as any).$router.push('/')
+            });
         })
         .catch((error) => {
           console.error(error);
         });
       // (this as any).newPost.imageUrl = '';
-      // firebase.database().ref('posts').push((this as any).newPost)
-      //   .then(() => {
-      //     (this as any).$router.push('/')
-      //   });
+      firebase.database().ref('posts').push((this as any).newPost)
+        .then(() => {
+          (this as any).$router.push('/')
+        });
     },
     async upload(event: any) {
       const files = event.target.files || event.dataTransfer.files
