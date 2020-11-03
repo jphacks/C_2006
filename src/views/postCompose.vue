@@ -117,17 +117,24 @@ export default {
     const newPost: PostData = {imageUrl: '',text: '', tags: {cost: '', with: '', genre: '', time: ''}}
     return {
       newPost,
-      uploadedImage: ''
+      uploadedImage: undefined,
     }
   },
   methods: {
     sendPost() {
-      // Resolve firebase rejecting undefined
-      (this as any).newPost.imageUrl = '';
-      firebase.database().ref('posts').push((this as any).newPost)
-        .then(() => {
-          (this as any).$router.push('/')
+      const storageRef = firebase.storage().ref();
+      storageRef.child('images/test.jpg').putString((this as any).uploadedImage)
+        .then((snapshot) => {
+          console.log('uploaded an image!');
+        })
+        .catch((error) => {
+          console.error(error);
         });
+      // (this as any).newPost.imageUrl = '';
+      // firebase.database().ref('posts').push((this as any).newPost)
+      //   .then(() => {
+      //     (this as any).$router.push('/')
+      //   });
     },
     async upload(event: any) {
       const files = event.target.files || event.dataTransfer.files
