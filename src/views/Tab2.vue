@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonIcon, IonButton, loadingController, toastController } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonIcon, IonButton } from '@ionic/vue';
 import { searchOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
