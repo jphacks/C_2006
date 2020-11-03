@@ -122,8 +122,9 @@ export default {
   },
   methods: {
     sendPost() {
+      const key = firebase.database().ref('posts').push().key;
       const storageRef = firebase.storage().ref();
-      storageRef.child('images/test.jpg').putString((this as any).uploadedImage).then(
+      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage).then(
         (snapshot) => {
           console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
