@@ -15,7 +15,7 @@
       <div>
         <div class="userarea">
           <h1>Username</h1>
-          <ion-button href="/setting">
+          <ion-button @click="toSettingView()">
             <ion-icon :icon="settingsOutline" />
           </ion-button>
         </div>
@@ -23,7 +23,7 @@
         <post-container @postid="toDetailView"/>
 
         <ion-fab class="fab-btn">
-          <ion-fab-button href="/compose">
+          <ion-fab-button @click="toComposeView()">
             <ion-icon :icon="add"></ion-icon>
           </ion-fab-button>
         </ion-fab>
@@ -51,6 +51,12 @@ export default  {
   methods: {
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
+    },
+    toSettingView() {
+      (this as any).$router.push('/setting');
+    },
+    toComposeView() {
+      (this as any).$router.push('/compose');
     }
   }
 }
