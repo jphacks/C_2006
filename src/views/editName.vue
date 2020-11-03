@@ -2,41 +2,37 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Setting</ion-title>
+          <ion-icon slot="start" :icon="chevronBackOutline" class="back-button" @click="backSetting()"></ion-icon>
+        <ion-title>Update Name</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Setting</ion-title>
+          <ion-title size="large">Update Name</ion-title>
         </ion-toolbar>
       </ion-header>
 
       <div class="wrapper">
         <div class="forms">
           <ion-list>
-            <ion-item @click="toEditName()">
-              <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
-              <ion-label>name</ion-label>
+            <ion-item>
+              <ion-label position="stacked">name</ion-label>
+              <ion-input placeholder="name" type="text" v-model="userData.displayName"></ion-input>
             </ion-item>
 
-            <ion-item @click="toEditEmail()">
-              <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
-              <ion-label>email</ion-label>
-            </ion-item>
-
-            <ion-item @click="toEditPassword()">
-              <ion-icon slot="end" :icon="chevronForwardOutline"></ion-icon>
-              <ion-label>password</ion-label>
+            <ion-item>
+              <ion-label position="stacked">password</ion-label>
+              <ion-input placeholder="password" type="password"></ion-input>
             </ion-item>
           </ion-list>
         </div>
 
     
-        <ion-button class="signout" @click="signout()">
-          <ion-icon slot="start" :icon="logOutOutline"></ion-icon>
-          Signout
-        </ion-button>
+        <ion-button class="update" @click="update()">
+            <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
+            Update
+          </ion-button>
       </div>
       
       
@@ -45,18 +41,18 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonItem, IonList , IonIcon} from '@ionic/vue';
-import { logOutOutline, checkmarkOutline, chevronForwardOutline } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { logOutOutline, checkmarkOutline, chevronBackOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton, IonLabel, IonItem, IonList, IonIcon },
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon },
   setup() {
     return {
       logOutOutline,
       checkmarkOutline,
-      chevronForwardOutline,
+      chevronBackOutline,
       originalUserData: {},
       userData: {
         displayName: '',
@@ -102,20 +98,18 @@ export default  {
         (this as any).$router.push('/signin');
       });
     },
-    toEditName() {
-      (this as any).$router.push('/edit/name');
-    },
-    toEditEmail() {
-      (this as any).$router.push('/edit/email');
-    },
-    toEditPassword() {
-      (this as any).$router.push('/edit/password');
+    backSetting() {
+      (this as any).$router.push('/setting');
     }
   }
 }
 </script>
 
 <style scoped>
+.back-button{
+  margin-left: 10px;
+}
+
 .wrapper{
   text-align: center;
 }

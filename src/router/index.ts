@@ -40,6 +40,18 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'post/:id',
         component: () => import('@/views/postDetail.vue')
+      },
+      {
+        path: 'edit/name',
+        component: () => import('@/views/editName.vue')
+      },
+      {
+        path: 'edit/email',
+        component: () => import('@/views/editEmail.vue')
+      },
+      {
+        path: 'edit/password',
+        component: () => import('@/views/editPassword.vue')
       }
     ]
   },
