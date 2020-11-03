@@ -29,7 +29,7 @@
         </div>
 
     
-        <ion-button class="update" @click="update()">
+        <ion-button class="update" @click="updatePassword()">
             <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
             Update
           </ion-button>
@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController } from '@ionic/vue';
 import { logOutOutline, checkmarkOutline, chevronBackOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
@@ -68,7 +68,7 @@ export default  {
     (this as any).userData.email = (this as any).originalUserData.email;
   },
   methods: {
-    update() {
+    async updatePassword() {
       const originalUserData = (this as any).originalUserData;
       const userData = (this as any).userData;
       const newPassword = (this as any).newPassword;
@@ -77,27 +77,55 @@ export default  {
         (this as any).currentPassword
       )
 
+      const loading = await loadingController
+      .create({
+        message: 'Please wait...',
+        duration: 5000,
+      });
+
+      await loading.present();
+
       if(!originalUserData) {
+        loading.dismiss();
+        (this as any).openToast('Failed!','danger');
         return;
       }
       
-      originalUserData.reauthenticateWithCredential(credential).then(function() {
+      originalUserData.reauthenticateWithCredential(credential).then(() => {
         // User re-authenticated.
         console.log('success')
         if(newPassword !== originalUserData.password) {
           originalUserData.updatePassword(newPassword).then(() => {
-            console.log('password updated!');
+            loading.dismiss();
+            (this as any).openToast('Updated!','success');
+            (this as any).$router.push('/setting');
           }).catch((error: any) => {
+            loading.dismiss();
+            (this as any).openToast('Failed!','danger');
             console.error(error);
           });
+        }else{
+          loading.dismiss();
+          (this as any).openToast('Nothing update!','warning');
         }
-      }).catch(function(error: any) {
+      }).catch((error: any) => {
         // An error happened.
+        loading.dismiss();
+        (this as any).openToast('Failed!','danger');
         console.log(error)
       });
     },
     backSetting() {
       (this as any).$router.push('/setting');
+    },
+    async openToast(text: string,status: string) {
+      const toast = await toastController
+        .create({
+          message: text,
+          color: status,
+          duration: 2000
+        })
+      return toast.present();
     }
   }
 }
