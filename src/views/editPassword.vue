@@ -86,6 +86,8 @@ export default  {
       await loading.present();
 
       if(!originalUserData) {
+        loading.dismiss();
+        (this as any).openToast('Failed!','danger');
         return;
       }
       
@@ -95,25 +97,32 @@ export default  {
         if(newPassword !== originalUserData.password) {
           originalUserData.updatePassword(newPassword).then(() => {
             loading.dismiss();
-            (this as any).openToast();
+            (this as any).openToast('Updated!','success');
             (this as any).$router.push('/setting');
           }).catch((error: any) => {
+            loading.dismiss();
+            (this as any).openToast('Failed!','danger');
             console.error(error);
           });
+        }else{
+          loading.dismiss();
+          (this as any).openToast('Nothing update!','warning');
         }
-      }).catch(function(error: any) {
+      }).catch((error: any) => {
         // An error happened.
+        loading.dismiss();
+        (this as any).openToast('Failed!','danger');
         console.log(error)
       });
     },
     backSetting() {
       (this as any).$router.push('/setting');
     },
-    async openToast() {
+    async openToast(text: string,status: string) {
       const toast = await toastController
         .create({
-          message: 'Success',
-          color: 'success',
+          message: text,
+          color: status,
           duration: 2000
         })
       return toast.present();
