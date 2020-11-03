@@ -98,6 +98,7 @@ interface PostData{
     genre: string;
     time: string;
   };
+  composedAt: Object;
 }
 
 export default {
@@ -114,7 +115,7 @@ export default {
     }
   },
   data() {
-    const newPost: PostData = {imageUrl: '',text: '', tags: {cost: '', with: '', genre: '', time: ''}}
+    const newPost: PostData = {imageUrl: '',text: '', tags: {cost: '', with: '', genre: '', time: ''}, composedAt: {}}
     return {
       newPost,
       uploadedImage: undefined,
@@ -128,6 +129,7 @@ export default {
         (snapshot) => {
           console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
+          (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP
           firebase.database().ref('posts').push((this as any).newPost)
             .then(() => {
               (this as any).$router.push('/');
