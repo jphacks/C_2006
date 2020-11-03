@@ -167,7 +167,9 @@ export default  {
     postsRef.once('value').then((snapshot) => {
       (this as any).posts = Object.entries(snapshot.val()).map(([key, value]) => ({
         key: key,
-        text: (value as any).text
+        image: (value as any).image,
+        tags: (value as any).tags,
+        text: (value as any).text,
       }));
     });
   }

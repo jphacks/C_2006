@@ -34,7 +34,7 @@
         </div>
 
     
-        <ion-button class="signup" href="/signup">
+        <ion-button class="signup" @click="toSignupView()">
           <ion-icon slot="start" :icon="personAddOutline"></ion-icon>
           go to Signup page
         </ion-button>
@@ -72,6 +72,9 @@ export default  {
           console.error(error);
         }
       );
+    },
+    toSignupView() {
+      (this as any).$router.push('/signup');
     }
   }
 }

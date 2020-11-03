@@ -38,7 +38,7 @@
           </ion-button>
         </div>
     
-        <ion-button class="signin" href="/signin">
+        <ion-button class="signin" @click="toSigninView()">
           <ion-icon slot="start" :icon="logInOutline"></ion-icon>
           go to Signin page
         </ion-button>
@@ -83,6 +83,9 @@ export default  {
         .catch(error => {
           console.error(error);
         });
+    },
+    toSigninView() {
+      (this as any).$router.push('/signin');
     }
   }
 }

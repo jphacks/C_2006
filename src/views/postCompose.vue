@@ -117,10 +117,6 @@ export default {
     const newPost: PostData = {image: undefined,text: '', tags: {cost: '', with: '', genre: '', time: ''}}
     return {
       newPost,
-      samplePost: {
-        text: 'hogehogehogehoge',
-        tags: {cost: '1000-5000円', with: '友達と', genre: 'Cook', time: '0-1h'},
-      }
     }
   },
   methods: {
@@ -130,7 +126,6 @@ export default {
       
       firebase.database().ref('posts').push((this as any).newPost)
         .then(() => {
-          console.log('send!');
           (this as any).$router.push('/')
         });
     },

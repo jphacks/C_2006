@@ -2,17 +2,17 @@
   <ion-page>
     <ion-tabs>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button tab="tab1" href="/stock">
+        <ion-tab-button tab="tab1" @click="toStockView()">
           <ion-icon :icon="bookmarkOutline" />
           <ion-label>Stocks</ion-label>
         </ion-tab-button>
           
-        <ion-tab-button tab="tab2" href="/search">
+        <ion-tab-button tab="tab2" @click="toSearchView()">
           <ion-icon :icon="searchOutline" />
           <ion-label>Search</ion-label>
         </ion-tab-button>
         
-        <ion-tab-button tab="tab3" href="/mypage">
+        <ion-tab-button tab="tab3" @click="toMypage()">
           <ion-icon :icon="personCircleOutline" />
           <ion-label>Mypage</ion-label>
         </ion-tab-button>
@@ -33,6 +33,17 @@ export default {
       searchOutline,
       bookmarkOutline,
       personCircleOutline
+    }
+  },
+  methods: {
+    toStockView() {
+      (this as any).$router.push('/stock');
+    },
+    toSearchView() {
+      (this as any).$router.push('/search');
+    },
+    toMypage() {
+      (this as any).$router.push('/mypage');
     }
   }
 }
