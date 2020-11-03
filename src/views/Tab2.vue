@@ -106,10 +106,10 @@ export default  {
   data() {
     return {
       tags: {
-        cost: '',
-        genre: '',
-        time: '',
-        with: '',
+        cost: 'all',
+        genre: 'all',
+        time: 'all',
+        with: 'all',
       },
       posts: [] as any
     }
@@ -172,7 +172,6 @@ export default  {
           });
         }
       }
-      console.log((this as any).posts);
 
       // solution with firebase
       //
