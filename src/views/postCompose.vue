@@ -98,7 +98,7 @@ interface PostData{
     genre: string;
     time: string;
   };
-  composedAt: Object;
+  composedAt: object;
 }
 
 export default {
