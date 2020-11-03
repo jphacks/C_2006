@@ -27,7 +27,7 @@
             </ion-item>
           </ion-list>
 
-          <ion-button class="update" @click="update()">
+          <ion-button class="update" @click="updateEmail()">
             <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
             Update
           </ion-button>
@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController} from '@ionic/vue';
 import { logOutOutline, checkmarkOutline, chevronBackOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
@@ -66,13 +66,21 @@ export default  {
     (this as any).userData.email = (this as any).originalUserData.email;
   },
   methods: {
-    update() {
+    async updateEmail() {
       const originalUserData = (this as any).originalUserData;
       const userData = (this as any).userData;
       const credential = firebase.auth.EmailAuthProvider.credential(
         originalUserData.email,
         (this as any).password
       )
+
+      const loading = await loadingController
+      .create({
+        message: 'Please wait...',
+        duration: 5000,
+      });
+
+      await loading.present();
 
       if(!originalUserData) {
         return;
@@ -82,12 +90,14 @@ export default  {
       // update email
       // **in progress!**
 
-      originalUserData.reauthenticateWithCredential(credential).then(function() {
+      originalUserData.reauthenticateWithCredential(credential).then(() => {
         // User re-authenticated.
         console.log('success')
         if(userData.email !== originalUserData.email) {
           originalUserData.updateEmail(userData.email).then(() => {
-            console.log('email updated!');
+            loading.dismiss();
+            (this as any).openToast();
+            (this as any).$router.push('/setting');
           }).catch((error: any) => {
             console.error(error);
           });
@@ -100,6 +110,15 @@ export default  {
     },
     backSetting() {
       (this as any).$router.push('/setting');
+    },
+    async openToast() {
+      const toast = await toastController
+        .create({
+          message: 'Success',
+          color: 'success',
+          duration: 2000
+        })
+      return toast.present();
     }
   }
 }

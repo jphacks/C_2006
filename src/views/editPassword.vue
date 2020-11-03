@@ -29,7 +29,7 @@
         </div>
 
     
-        <ion-button class="update" @click="update()">
+        <ion-button class="update" @click="updatePassword()">
             <ion-icon slot="start" :icon="checkmarkOutline"></ion-icon>
             Update
           </ion-button>
@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController } from '@ionic/vue';
 import { logOutOutline, checkmarkOutline, chevronBackOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
@@ -68,7 +68,7 @@ export default  {
     (this as any).userData.email = (this as any).originalUserData.email;
   },
   methods: {
-    update() {
+    async updatePassword() {
       const originalUserData = (this as any).originalUserData;
       const userData = (this as any).userData;
       const newPassword = (this as any).newPassword;
@@ -77,16 +77,26 @@ export default  {
         (this as any).currentPassword
       )
 
+      const loading = await loadingController
+      .create({
+        message: 'Please wait...',
+        duration: 5000,
+      });
+
+      await loading.present();
+
       if(!originalUserData) {
         return;
       }
       
-      originalUserData.reauthenticateWithCredential(credential).then(function() {
+      originalUserData.reauthenticateWithCredential(credential).then(() => {
         // User re-authenticated.
         console.log('success')
         if(newPassword !== originalUserData.password) {
           originalUserData.updatePassword(newPassword).then(() => {
-            console.log('password updated!');
+            loading.dismiss();
+            (this as any).openToast();
+            (this as any).$router.push('/setting');
           }).catch((error: any) => {
             console.error(error);
           });
@@ -98,6 +108,15 @@ export default  {
     },
     backSetting() {
       (this as any).$router.push('/setting');
+    },
+    async openToast() {
+      const toast = await toastController
+        .create({
+          message: 'Success',
+          color: 'success',
+          duration: 2000
+        })
+      return toast.present();
     }
   }
 }
