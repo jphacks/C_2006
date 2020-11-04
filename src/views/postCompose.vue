@@ -137,7 +137,7 @@ export default {
         contentType: 'image/jpeg',
       };
       
-      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage, 'data_url', metadata)
+      await storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage, 'data_url', metadata)
       .then((snapshot) => {
           console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
