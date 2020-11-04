@@ -125,8 +125,12 @@ export default {
     sendPost() {
       const key: string = firebase.database().ref('posts').push().key!;
       const storageRef = firebase.storage().ref();
-      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage).then(
-        (snapshot) => {
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
+      
+      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage, 'data_url', metadata)
+      .then((snapshot) => {
           console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
           (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
