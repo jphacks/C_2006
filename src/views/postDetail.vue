@@ -12,7 +12,7 @@
         </ion-toolbar>
       </ion-header>
       
-      <img src="../../public/assets/icon/icon.png" alt="picture">
+      <img :src="post.imageUrl" alt="picture">
       <ion-chip>
         <ion-icon :icon="cashOutline"></ion-icon>
         <ion-label>{{ post.tags.cost }}</ion-label>
@@ -86,21 +86,25 @@ export default  {
       },
     }
   },
-  created() {
+  async created() {
     const key = (this as any).$route.params.id;
-    firebase.database()
-      .ref(`posts/${key}`)
-      .once('value')
-      .then((snapshot) => {
+    const postRef = firebase.database().ref(`posts/${key}`);
+    const storageRef = firebase.storage().ref(`images/${key}.jpg`);
+
+    await postRef.once('value').then((snapshot) => {
         const value = snapshot.val();
         (this as any).post = {
           key: key,
           composedAt: value.composedAt,
-          imageUrl: value.imageUrl,
           tags: value.tags,
           text: value.text,
         };
       });
+    
+    await storageRef.getDownloadURL().then((url) => {
+      (this as any).post.imageUrl = url;
+      console.log(url);
+    });
   }
 }
 </script>
