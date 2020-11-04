@@ -20,7 +20,7 @@
           </ion-button>
         </div>
 
-        <post-container @postkey="toDetailView"/>
+        <post-container :posts="myposts" @postkey="toDetailView"/>
 
         <ion-fab class="fab-btn">
           <ion-fab-button @click="toComposeView()">
@@ -28,7 +28,6 @@
           </ion-fab-button>
         </ion-fab>
       </div>
-      {{ myposts }}
     </ion-content>
   </ion-page>
 </template>
