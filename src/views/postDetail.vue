@@ -43,6 +43,8 @@
         hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
         hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
       </p>
+      {{ $route.params.id }}
+      {{ post }}
     </ion-content>
   </ion-page>
 </template>
@@ -50,6 +52,7 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton } from '@ionic/vue';
 import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline } from 'ionicons/icons';
+import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
@@ -60,8 +63,29 @@ export default  {
       hourglassOutline,
       peopleOutline,
       folderOutline,
-      bookmarkOutline
+      bookmarkOutline,
     }
   },
+  data() {
+    return {
+      post: {},
+    }
+  },
+  created() {
+    const key = (this as any).$route.params.id;
+    firebase.database()
+      .ref(`posts/${key}`)
+      .once('value')
+      .then((snapshot) => {
+        const value = snapshot.val();
+        (this as any).post = {
+          key: key,
+          composedAt: value.composedAt,
+          imageUrl: value.imageUrl,
+          tags: value.tags,
+          text: value.text,
+        };
+      });
+  }
 }
 </script>
