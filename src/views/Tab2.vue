@@ -176,6 +176,12 @@ export default  {
         tags: (value as any).tags,
         text: (value as any).text,
       }));
+      for(var i = 0; i < (this as any).posts.length; i++) {
+        console.log((this as any).posts[i].imageUrl);
+        firebase.storage().ref((this as any).posts[i].imageUrl).getDownloadURL().then((url) => {
+          console.log(url);
+        });
+      }
     },
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
