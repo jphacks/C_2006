@@ -176,7 +176,7 @@ export default  {
         tags: (value as any).tags,
         text: (value as any).text,
       }));
-      for(var i = 0; i < (this as any).posts.length; i++) {
+      for(let i = 0; i < (this as any).posts.length; i++) {
         console.log((this as any).posts[i].imageUrl);
         await firebase.storage().ref((this as any).posts[i].imageUrl).getDownloadURL().then((url) => {
           console.log(url);
