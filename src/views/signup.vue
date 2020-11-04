@@ -3,7 +3,7 @@
     <ion-content :fullscreen="true">
 
       <div class="wrapper">
-        <img src="../../public/assets/logo.svg" alt="logo" class="img">
+        <img src="../../public/assets/logo2.svg" alt="logo" class="img">
         <div class="forms">
           <ion-list>
             <ion-item>
@@ -84,10 +84,13 @@ export default  {
 <style scoped>
 .wrapper{
   text-align: center;
+  background-image: url("../../public/assets/sign-background.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .img{
     width: 80%;
-    margin: auto;
+    margin: 150px 0 auto 0;
 }
 .forms{
   margin: 0 5%;
