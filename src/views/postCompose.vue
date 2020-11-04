@@ -98,6 +98,7 @@ interface PostData{
     genre: string;
     time: string;
   };
+  uid: string;
   composedAt: object;
 }
 
@@ -115,11 +116,14 @@ export default {
     }
   },
   data() {
-    const newPost: PostData = {imageUrl: '',text: '', tags: {cost: '', with: '', genre: '', time: ''}, composedAt: {}}
+    const newPost: PostData = {imageUrl: '',text: '', tags: {cost: '', with: '', genre: '', time: ''}, uid:'', composedAt: {}}
     return {
       newPost,
       uploadedImage: undefined,
     }
+  },
+  created() {
+    (this as any).newPost.uid = firebase.auth().currentUser?.uid;
   },
   methods: {
     async sendPost() {
@@ -141,6 +145,7 @@ export default {
       .then((snapshot) => {
           console.log(snapshot);
           (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
+          (this as any).newPost.uid = firebase.auth().currentUser?.uid;
           (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
           const updateData: {[index: string]: any} = {};
           updateData[key] = (this as any).newPost;
