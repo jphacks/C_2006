@@ -20,7 +20,7 @@
           </ion-button>
         </div>
 
-        <post-container @postid="toDetailView"/>
+        <post-container :posts="myposts" @postkey="toDetailView"/>
 
         <ion-fab class="fab-btn">
           <ion-fab-button @click="toComposeView()">
@@ -51,6 +51,11 @@ export default  {
       userName: firebase.auth().currentUser?.displayName
     }
   },
+  data() {
+    return {
+      myposts: [] as any,
+    }
+  },
   methods: {
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
@@ -60,7 +65,34 @@ export default  {
     },
     toComposeView() {
       (this as any).$router.push('/compose');
-    }
+    },
+    async storeInPosts(data: object) {
+      (this as any).myposts = Object.entries(data).map(([key, value]) => ({
+        key: key,
+        composedAt: (value as any).composedAt,
+        imageUrl: (value as any).imageUrl,
+        tags: (value as any).tags,
+        text: (value as any).text,
+      }));
+      for(let i = 0; i < (this as any).myposts.length; i++) {
+        console.log((this as any).myposts[i].imageUrl);
+        await firebase.storage().ref((this as any).myposts[i].imageUrl).getDownloadURL().then((url) => {
+          console.log(url);
+          (this as any).myposts[i].imageUrl = url;
+        });
+      }
+    },
+  },
+  async created(){
+    const uid: string = firebase.auth().currentUser?.uid!;
+    const postsRef = firebase.database().ref('posts');
+    await postsRef.orderByChild('uid')
+      .equalTo(uid)
+      .limitToLast(10)
+      .once('value')
+      .then((snapshot) => {
+        (this as any).storeInPosts(snapshot.val());
+      });
   }
 }
 </script>

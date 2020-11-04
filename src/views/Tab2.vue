@@ -70,7 +70,7 @@
       </div>
       <!-- success get posts -->
       <div v-else class="result">
-        <post-container :posts="posts" @postid="toDetailView"/>
+        <post-container :posts="posts" @postkey="toDetailView"/>
       </div>
       
       
