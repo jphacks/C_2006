@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController} from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController, alertController } from '@ionic/vue';
 import { logOutOutline, checkmarkOutline, chevronBackOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
@@ -81,6 +81,20 @@ export default  {
       });
 
       await loading.present();
+
+      if(userData.email===''&&(this as any).password===''){
+        loading.dismiss();
+        (this as any).presentAlert('Error','email & password No input.');
+        return;
+      }else if(userData.email===''){
+        loading.dismiss();
+        (this as any).presentAlert('Error','email No input.');
+        return;
+      }else if((this as any).password===''){
+        loading.dismiss();
+        (this as any).presentAlert('Error','password No input.');
+        return;
+      }
 
       if(!originalUserData) {
         loading.dismiss();
@@ -128,7 +142,16 @@ export default  {
           duration: 2000
         })
       return toast.present();
-    }
+    },
+    async presentAlert(title: string, message: string) {
+      const alert = await alertController
+        .create({
+          header: title,
+          message: message,
+          buttons: ['OK'],
+        });
+      return alert.present();
+    },
   }
 }
 </script>
