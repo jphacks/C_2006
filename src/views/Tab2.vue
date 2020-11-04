@@ -184,8 +184,8 @@ export default  {
         });
       }
     },
-    toDetailView(id: string) {
-      (this as any).router.push(`/post/${id}`);
+    toDetailView(key: string) {
+      (this as any).router.push(`/post/${key}`);
     }
   }
 }
