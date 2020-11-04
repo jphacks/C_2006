@@ -18,3 +18,10 @@ export default {
 }
 </script>
 
+<style scoped>
+img{
+  width: calc(100vmin/3);
+  height: calc(100vmin/3);
+  object-fit: contain;
+}
+</style>
