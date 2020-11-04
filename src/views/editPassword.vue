@@ -18,12 +18,12 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">current Password</ion-label>
-              <ion-input placeholder="current Password" type="password" v-model="currentPassword"></ion-input>
+              <ion-input placeholder="current Password" type="password" autocomplete="current-password" v-model="currentPassword"></ion-input>
             </ion-item>
 
             <ion-item>
               <ion-label position="stacked">new Password</ion-label>
-              <ion-input placeholder="new Password" type="new-password" v-model="newPassword"></ion-input>
+              <ion-input placeholder="new Password" type="password" autocomplete="new-password" v-model="newPassword"></ion-input>
             </ion-item>
           </ion-list>
         </div>
