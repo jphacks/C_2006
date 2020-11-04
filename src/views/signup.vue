@@ -1,16 +1,6 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Signup</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Signup</ion-title>
-        </ion-toolbar>
-      </ion-header>
 
       <div class="wrapper">
         <img src="../../public/assets/logo.svg" alt="logo" class="img">
@@ -50,13 +40,13 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { IonPage, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
 import { personAddOutline, logInOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
 export default  {
   name: 'Tab2',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon },
+  components: { IonContent, IonPage, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon },
   setup() {
     return {
       personAddOutline,
