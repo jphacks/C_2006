@@ -14,7 +14,7 @@ import { IonCol, IonGrid, IonRow } from '@ionic/vue';
 export default {
   components: { IonCol, IonGrid, IonRow },
   props: ['posts'],
-  emits: ['postid']
+  emits: ['postkey']
 }
 </script>
 
