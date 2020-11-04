@@ -60,7 +60,34 @@ export default  {
     },
     toComposeView() {
       (this as any).$router.push('/compose');
-    }
+    },
+    async storeInPosts(data: object) {
+      (this as any).posts = Object.entries(data).map(([key, value]) => ({
+        key: key,
+        composedAt: (value as any).composedAt,
+        imageUrl: (value as any).imageUrl,
+        tags: (value as any).tags,
+        text: (value as any).text,
+      }));
+      for(let i = 0; i < (this as any).posts.length; i++) {
+        console.log((this as any).posts[i].imageUrl);
+        await firebase.storage().ref((this as any).posts[i].imageUrl).getDownloadURL().then((url) => {
+          console.log(url);
+          (this as any).posts[i].imageUrl = url;
+        });
+      }
+    },
+  },
+  async created(){
+    const uid: string = firebase.auth().currentUser?.uid!;
+    const postsRef = firebase.database().ref('posts');
+    await postsRef.orderByChild('uid')
+      .equalTo(uid)
+      .limitToLast(10)
+      .once('value')
+      .then((snapshot) => {
+        (this as any).storeInPosts(snapshot.val());
+      });
   }
 }
 </script>
