@@ -13,8 +13,7 @@
       </ion-header>
       
       <!-- no posts -->
-      <!--<div v-if="!posts.length" class="search">-->
-      <div v-if="isSearch" class="search">
+      <div v-if="posts.length === 0" class="search">
         <ion-list>
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
@@ -64,17 +63,14 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="search()">
-        <!--<ion-button @click="getPosts()">-->
+        <ion-button @click="getPosts()">
           <ion-icon slot="start" :icon="searchOutline"></ion-icon>
           Search
         </ion-button>
-        
-        {{ posts }}
       </div>
       <!-- success get posts -->
       <div v-else class="result">
-        <post-container @postid="toDetailView"/>
+        <post-container :posts="posts" @postid="toDetailView"/>
       </div>
       
       
@@ -118,7 +114,7 @@ export default  {
     // searchボタンをクリックしたら、データを受け取る。
     //データが存在すれば success というトーストを表示して投稿を表示する
     //データが存在しなければ failed というトーストを表示して検索画面のまま。
-    /* 
+    
     async getPosts(): Promise<any>{
       // loading
       const loading = await loadingController
@@ -131,39 +127,27 @@ export default  {
 
       setTimeout(function() {
         loading.dismiss()
-      }, 3000);
+      }, 10000);
 
-      let getPostFlag = true;
-
-      const refPosts = firebase.database().ref('posts');
-      await refPosts.limitToLast(10).on('child_added', (snapshot: any) => {
-        console.log(snapshot);
-        const post = snapshot.val();
-        console.log(post);
-      });
-
-      // Add to the post by random numbers.
-      const num = Math.floor(Math.random() * Math.floor(2))
-      console.log(num)
-      if(num === 1){
-        // add to the post 
-        //this.posts.push("hoge")
-      }else{
-        // not add 
-        getPostFlag = false;
-      }
-      loading.dismiss();
-
-      await this.openToast(getPostFlag)
+      const postsRef = firebase.database().ref('posts');
+      postsRef.orderByChild('composedAt')
+        .limitToLast(10)
+        .once('value')
+        .then((snapshot) => {
+          (this as any).storeInPosts(snapshot.val());
+          loading.dismiss();
+          (this as any).openToast(true);
+        });
     },
     async openToast(flag: boolean) {
       const toast = await toastController
         .create({
           message: flag? 'succeed' : 'failed',
+          color: flag? 'success' : 'danger',
           duration: 2000
         })
       return toast.present();
-    },*/
+    },
     search() {
       for(const key of Object.keys((this as any).tags)) {
         if((this as any).tags[key] !== 'all') {
@@ -196,15 +180,6 @@ export default  {
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
     }
-  },
-  created() {
-    const postsRef = firebase.database().ref('posts');
-    postsRef.orderByChild('composedAt')
-      .limitToLast(10)
-      .once('value')
-      .then((snapshot) => {
-      (this as any).storeInPosts(snapshot.val());
-    });
   }
 }
 </script>
