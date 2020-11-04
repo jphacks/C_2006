@@ -70,6 +70,7 @@
       </div>
       <!-- success get posts -->
       <div v-else class="result">
+        <ion-button expand="full" @click="clearPosts">条件を変えて検索する</ion-button>
         <post-container :posts="posts" @postkey="toDetailView"/>
       </div>
       
@@ -186,6 +187,9 @@ export default  {
     },
     toDetailView(key: string) {
       (this as any).router.push(`/post/${key}`);
+    },
+    clearPosts() {
+      (this as any).posts = [];
     }
   }
 }
