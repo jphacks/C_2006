@@ -89,8 +89,8 @@ export default  {
   background-size: cover;
 }
 .img{
-    width: 80%;
     margin: 150px 0 auto 0;
+    padding-right: 10px;
 }
 .forms{
   margin: 0 5%;
