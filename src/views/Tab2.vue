@@ -168,7 +168,7 @@ export default  {
       //     (this as any).storeInPosts(snapshot.val());
       //   });
     },
-    storeInPosts(data: object) {
+    async storeInPosts(data: object) {
       (this as any).posts = Object.entries(data).map(([key, value]) => ({
         key: key,
         composedAt: (value as any).composedAt,
@@ -178,8 +178,9 @@ export default  {
       }));
       for(var i = 0; i < (this as any).posts.length; i++) {
         console.log((this as any).posts[i].imageUrl);
-        firebase.storage().ref((this as any).posts[i].imageUrl).getDownloadURL().then((url) => {
+        await firebase.storage().ref((this as any).posts[i].imageUrl).getDownloadURL().then((url) => {
           console.log(url);
+          (this as any).posts[i].imageUrl = url;
         });
       }
     },
