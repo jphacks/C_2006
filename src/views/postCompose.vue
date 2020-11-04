@@ -167,6 +167,16 @@ export default {
             .then(() => {
               loading.dismiss();
               (this as any).openToast('success!','success');
+              
+              // clear data
+              (this as any).newPost.imageUrl = '';
+              (this as any).newPost.text = '';
+              (this as any).newPost.tags.cost = '';
+              (this as any).newPost.tags.with = '';
+              (this as any).newPost.tags.genre = '';
+              (this as any).newPost.tags.time = '';
+              (this as any).newPost.uid = '';
+
               (this as any).$router.push('/mypage');
             });
         },
