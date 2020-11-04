@@ -2,7 +2,7 @@
   <ion-grid>
     <ion-row>
       <ion-col v-for="post in posts"  :key="post.id" size="4">
-        <img :src="post.imageUrl" alt="picture" @click="$emit('postid',post.key)">
+        <img :src="post.imageUrl" alt="picture" @click="$emit('postkey',post.key)">
       </ion-col>
     </ion-row>
   </ion-grid>
