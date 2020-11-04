@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import firebase from 'firebase';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton, loadingController, toastController } from '@ionic/vue';
 import { imageOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline, pushOutline } from 'ionicons/icons';
 
 interface PostData{
@@ -122,7 +122,15 @@ export default {
     }
   },
   methods: {
-    sendPost() {
+    async sendPost() {
+      const loading = await loadingController
+      .create({
+        message: 'Please wait...',
+        duration: 5000,
+      });
+
+      await loading.present();
+
       const key: string = firebase.database().ref('posts').push().key!;
       const storageRef = firebase.storage().ref();
       const metadata = {
@@ -138,10 +146,14 @@ export default {
           updateData[key] = (this as any).newPost;
           firebase.database().ref('posts').update(updateData)
             .then(() => {
-              (this as any).$router.push('/');
+              loading.dismiss();
+              (this as any).openToast('success!','success');
+              (this as any).$router.push('/mypage');
             });
         },
         (error) => {
+          loading.dismiss();
+          (this as any).openToast('failed!','danger')
           console.error(error);
         });
     },
@@ -179,7 +191,16 @@ export default {
         result = false
       }
       return result
-    }
+    },
+    async openToast(text: string,status: string) {
+      const toast = await toastController
+        .create({
+          message: text,
+          color: status,
+          duration: 2000
+        })
+      return toast.present();
+    },
   }
 }
 </script>
