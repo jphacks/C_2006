@@ -15,19 +15,19 @@
       <img src="../../public/assets/icon/icon.png" alt="picture">
       <ion-chip>
         <ion-icon :icon="cashOutline"></ion-icon>
-        <ion-label>0-1000円</ion-label>
+        <ion-label>{{ post.tags.cost }}</ion-label>
       </ion-chip>
       <ion-chip>
         <ion-icon :icon="peopleOutline"></ion-icon>
-        <ion-label>All</ion-label>
+        <ion-label>{{ post.tags.with }}</ion-label>
       </ion-chip>
       <ion-chip>
         <ion-icon :icon="hourglassOutline"></ion-icon>
-        <ion-label>1-3h</ion-label>
+        <ion-label>{{ post.tags.time }}</ion-label>
       </ion-chip>
       <ion-chip>
         <ion-icon :icon="folderOutline"></ion-icon>
-        <ion-label>Play</ion-label>
+        <ion-label>{{ post.tags.genre }}</ion-label>
       </ion-chip>
 
       
@@ -35,16 +35,9 @@
         <ion-icon :icon="bookmarkOutline"></ion-icon>
       </ion-button>
       
-
       <p>
-        hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
-        hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
-        hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
-        hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
-        hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge
+        {{ post.text }}
       </p>
-      {{ $route.params.id }}
-      {{ post }}
     </ion-content>
   </ion-page>
 </template>
@@ -53,6 +46,18 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton } from '@ionic/vue';
 import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline } from 'ionicons/icons';
 import firebase from 'firebase';
+
+interface PostData{
+  imageUrl: string;
+  text: string;
+  tags: {
+    cost: string;
+    with: string;
+    genre: string;
+    time: string;
+  };
+  composedAt: object;
+}
 
 export default  {
   name: 'Tab2',
@@ -68,7 +73,17 @@ export default  {
   },
   data() {
     return {
-      post: {},
+      post: {
+        imageUrl: '',
+        text: '',
+        tags: {
+          cost: '',
+          with: '',
+          genre: '',
+          time: '',
+        },
+        composedAt: {},
+      },
     }
   },
   created() {
