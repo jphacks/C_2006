@@ -31,7 +31,7 @@
       </ion-chip>
 
       
-      <ion-button>
+      <ion-button @click="stockPost()">
         <ion-icon :icon="bookmarkOutline"></ion-icon>
       </ion-button>
       
@@ -86,10 +86,25 @@ export default  {
       },
     }
   },
+  methods: {
+    async stockPost() {
+      const key = (this as any).$route.params.id;
+      const uid = firebase.auth().currentUser?.uid;
+
+      if(!uid) return;
+
+      firebase.database().ref(`stocks/${uid}`).push({
+        key: key,
+      }).then(() => {
+        console.log('stock!');
+      }).catch((error) => {
+        console.error(error);
+      })
+    }
+  },
   async created() {
     const key = (this as any).$route.params.id;
     const postRef = firebase.database().ref(`posts/${key}`);
-    const storageRef = firebase.storage().ref(`images/${key}.jpg`);
 
     await postRef.once('value').then((snapshot) => {
         const value = snapshot.val();
