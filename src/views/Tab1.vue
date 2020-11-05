@@ -12,8 +12,7 @@
         </ion-toolbar>
       </ion-header>
     
-      <post-container @postid="toDetailView"/>
-      {{ posts }}
+      <post-container :posts="posts" @postid="toDetailView"/>
     </ion-content>
   </ion-page>
 </template>
@@ -72,7 +71,7 @@ export default  {
             .once('value')
             .then((snapshot) => {
               console.log(snapshot.val());
-              (this as any).storeInPosts(snapshot.val());
+              (this as any).posts.push(snapshot.val());
           });
         }
       });
