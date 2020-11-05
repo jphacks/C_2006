@@ -26,7 +26,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
             <ion-label>Cost</ion-label>
-            <ion-select value="all" v-model="newPost.tags.cost">
+            <ion-select v-model="newPost.tags.cost">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-1000">0-1000円</ion-select-option>
               <ion-select-option value="5000">1000-5000円</ion-select-option>
@@ -38,7 +38,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
             <ion-label>With</ion-label>
-            <ion-select value="all" v-model="newPost.tags.with">
+            <ion-select v-model="newPost.tags.with">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="alone">1人で</ion-select-option>
               <ion-select-option value="friend">友達と</ion-select-option>
@@ -50,7 +50,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="hourglassOutline"></ion-icon>
             <ion-label>Time</ion-label>
-            <ion-select value="all" v-model="newPost.tags.time">
+            <ion-select v-model="newPost.tags.time">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="less-hour">0-1h</ion-select-option>
               <ion-select-option value="3hours">1-3h</ion-select-option>
@@ -62,7 +62,7 @@
           <ion-item>
             <ion-icon slot="start" :icon="folderOutline"></ion-icon>
             <ion-label>Genre</ion-label>
-            <ion-select value="all" v-model="newPost.tags.genre">
+            <ion-select v-model="newPost.tags.genre">
               <ion-select-option value="all">All</ion-select-option>
               <ion-select-option value="cook">Cook</ion-select-option>
               <ion-select-option value="play">Play</ion-select-option>
@@ -86,7 +86,7 @@
 
 <script lang="ts">
 import firebase from 'firebase';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton, loadingController, toastController } from '@ionic/vue';
 import { imageOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline, pushOutline } from 'ionicons/icons';
 
 interface PostData{
@@ -98,6 +98,7 @@ interface PostData{
     genre: string;
     time: string;
   };
+  uid: string;
   composedAt: object;
 }
 
@@ -115,29 +116,72 @@ export default {
     }
   },
   data() {
-    const newPost: PostData = {imageUrl: '',text: '', tags: {cost: '', with: '', genre: '', time: ''}, composedAt: {}}
+    const newPost: PostData = {imageUrl: '',text: '', tags: {cost: 'all', with: 'all', genre: 'all', time: 'all'}, uid:'', composedAt: {}}
     return {
       newPost,
       uploadedImage: undefined,
     }
   },
+  created() {
+    (this as any).newPost.uid = firebase.auth().currentUser?.uid;
+  },
   methods: {
-    sendPost() {
+    async sendPost() {
+      const loading = await loadingController
+      .create({
+        message: 'Please wait...',
+        duration: 5000,
+      });
+
+      await loading.present();
+
+      if(typeof((this as any).uploadedImage)==='undefined'){
+        loading.dismiss();
+        this.openToast('choice picture.','danger');
+        return;
+      }
+
       const key: string = firebase.database().ref('posts').push().key!;
       const storageRef = firebase.storage().ref();
-      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage).then(
-        (snapshot) => {
-          console.log(snapshot);
-          (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
+      
+      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage, 'data_url', metadata)
+      .then((snapshot) => {
+          (this as any).newPost.imageUrl = snapshot.ref.getDownloadURL();
+          (this as any).newPost.uid = firebase.auth().currentUser?.uid;
           (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
+
+          if((this as any).newPost.imageUrl==='' || (this as any).newPost.text==='' || (this as any).newPost.uid==='' ||
+           (this as any).newPost.tags.cost==='' || (this as any).newPost.tags.with==='' || (this as any).newPost.tags.genre==='' || (this as any).newPost.tags.time===''){
+            loading.dismiss();
+            (this as any).openToast('please input all form','danger');
+            return;
+          }
+
           const updateData: {[index: string]: any} = {};
           updateData[key] = (this as any).newPost;
           firebase.database().ref('posts').update(updateData)
             .then(() => {
-              (this as any).$router.push('/');
+              loading.dismiss();
+              (this as any).openToast('success!','success');
+              
+              // clear data
+              (this as any).newPost.imageUrl = '';
+              (this as any).newPost.text = '';
+              (this as any).newPost.tags.cost = '';
+              (this as any).newPost.tags.with = '';
+              (this as any).newPost.tags.genre = '';
+              (this as any).newPost.tags.time = '';
+              (this as any).newPost.uid = '';
+
+              (this as any).$router.push('/mypage');
             });
         },
         (error) => {
+          loading.dismiss();
+          (this as any).openToast('failed!','danger')
           console.error(error);
         });
     },
@@ -175,7 +219,16 @@ export default {
         result = false
       }
       return result
-    }
+    },
+    async openToast(text: string,status: string) {
+      const toast = await toastController
+        .create({
+          message: text,
+          color: status,
+          duration: 2000
+        })
+      return toast.present();
+    },
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <ion-content :fullscreen="true">
 
       <div class="wrapper">
-        <img src="../../public/assets/logo.svg" alt="logo" class="img">
+        <img src="../../public/assets/logo2.svg" alt="logo" class="img">
         <div class="forms">
           <ion-list>
             <ion-item>
@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { IonPage, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController } from '@ionic/vue';
 import { personAddOutline, logInOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
@@ -57,26 +57,51 @@ export default  {
     }
   },
   methods: {
-    signup(name: string, email: string, passwd: string): void {
+    async signup(name: string, email: string, passwd: string){
+      const loading = await loadingController
+      .create({
+        message: 'Please wait...',
+        duration: 5000,
+      });
+
+      await loading.present();
+
+
       firebase.auth().createUserWithEmailAndPassword(email, passwd)
         .then((result) => {
           // to solve error "object is possibly 'null'"
           if(result.user === null) {
+            loading.dismiss();
+            this.openToast('failed','danger');
             return;
           }
+
           result.user.updateProfile({
             displayName: name
           }).then(() => {
+            loading.dismiss();
+            this.openToast('Created user','success');
             (this as any).$router.push('/signin');
           })
         })
         .catch(error => {
           console.error(error);
+          loading.dismiss();
+          this.openToast('failed','danger');
         });
     },
     toSigninView() {
       (this as any).$router.push('/signin');
-    }
+    },
+    async openToast(text: string,status: string) {
+      const toast = await toastController
+        .create({
+          message: text,
+          color: status,
+          duration: 2000
+        })
+      return toast.present();
+    },
   }
 }
 </script>
@@ -84,10 +109,13 @@ export default  {
 <style scoped>
 .wrapper{
   text-align: center;
+  background-image: url("../../public/assets/sign-background.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .img{
-    width: 80%;
-    margin: auto;
+    margin: 150px 0 auto 0;
+    padding-right: 10px;
 }
 .forms{
   margin: 0 5%;
