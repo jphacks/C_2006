@@ -16,3 +16,12 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
+* {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+}
+
+</style>

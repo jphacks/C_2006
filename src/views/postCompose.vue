@@ -148,10 +148,10 @@ export default {
       };
       
       storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage, 'data_url', metadata)
-      .then((snapshot) => {
-          (this as any).newPost.imageUrl = snapshot.ref.getDownloadURL();
-          (this as any).newPost.uid = firebase.auth().currentUser?.uid;
-          (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
+      .then(async (snapshot) => {
+          (this as any).newPost.imageUrl = await snapshot.ref.getDownloadURL();
+          (this as any).newPost.uid = await firebase.auth().currentUser?.uid;
+          (this as any).newPost.composedAt = await firebase.database.ServerValue.TIMESTAMP;
 
           if((this as any).newPost.imageUrl==='' || (this as any).newPost.text==='' || (this as any).newPost.uid==='' ||
            (this as any).newPost.tags.cost==='' || (this as any).newPost.tags.with==='' || (this as any).newPost.tags.genre==='' || (this as any).newPost.tags.time===''){

@@ -12,7 +12,7 @@
         </ion-toolbar>
       </ion-header>
     
-      <post-container @postid="toDetailView"/>
+      <post-container :posts="posts" @postid="toDetailView"/>
     </ion-content>
   </ion-page>
 </template>
@@ -22,6 +22,8 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue
 import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 
+import firebase from 'firebase';
+
 export default  {
   name: 'Tab1',
   components: { postContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
@@ -30,10 +32,49 @@ export default  {
       router: useRouter()
     }
   },
+  data() {
+    return {
+      posts: [] as any,
+    }
+  },
   methods: {
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
-    }
+    },
+    async storeKeys(data: object) {
+      return Object.entries(data).map(([key, value]) => ({
+        key: key,
+        post: value.key
+      }));
+    },
+    async storeInPosts(data: object) {
+      (this as any).posts = Object.entries(data).map(([key, value]) => ({
+        key: key,
+        composedAt: (value as any).composedAt,
+        imageUrl: (value as any).imageUrl,
+        tags: (value as any).tags,
+        text: (value as any).text,
+      }));
+    },
+  },
+  async created() {
+    const uid = firebase.auth().currentUser?.uid;
+    await firebase.database().ref(`stocks/${uid}`)
+      .orderByChild('key')
+      .limitToLast(10)
+      .once('value')
+      .then(async (snapshot) => {
+        console.log(snapshot.val());
+        const postkeys = await (this as any).storeKeys(snapshot.val());
+        for(let i = 0; i < postkeys.length; i++) {
+          firebase.database().ref(`posts/${postkeys[i].post}`)
+            .once('value')
+            .then((snapshot) => {
+              console.log(snapshot.val());
+              (this as any).posts.push(snapshot.val());
+          });
+        }
+      });
   }
 }
 </script>
