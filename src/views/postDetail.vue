@@ -5,7 +5,12 @@
         <ion-title>Detail</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+
+    <ion-content v-if="isLoading">
+      Loading
+    </ion-content>
+
+    <ion-content :fullscreen="true" v-else-if="isExist">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Detail</ion-title>
@@ -39,6 +44,11 @@
         {{ post.text }}
       </p>
     </ion-content>
+
+    <ion-content v-else>
+      Post not Found.
+    </ion-content>
+
   </ion-page>
 </template>
 
@@ -87,6 +97,8 @@ export default  {
         },
         composedAt: {},
       },
+      isLoading: true,
+      isExist: true,
     }
   },
   methods: {
@@ -110,15 +122,21 @@ export default  {
     const postRef = firebase.database().ref(`posts/${key}`);
 
     await postRef.once('value').then((snapshot) => {
-        const value = snapshot.val();
-        (this as any).post = {
-          key: key,
-          imageUrl: value.imageUrl,
-          composedAt: value.composedAt,
-          tags: value.tags,
-          text: value.text,
-        };
-      });
+      if(!snapshot.val()) {
+        (this as any).isExist = false;
+        (this as any).isLoading = false;
+        return;
+      }
+      const value = snapshot.val();
+      (this as any).post = {
+        key: key,
+        imageUrl: value.imageUrl,
+        composedAt: value.composedAt,
+        tags: value.tags,
+        text: value.text,
+      };
+      (this as any).isLoading = false;
+    });
   }
 }
 </script>
