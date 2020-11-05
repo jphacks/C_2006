@@ -45,7 +45,10 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton } from '@ionic/vue';
 import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline } from 'ionicons/icons';
-import firebase from 'firebase';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 
 interface PostData{
   imageUrl: string;
