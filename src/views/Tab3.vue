@@ -74,13 +74,6 @@ export default  {
         tags: (value as any).tags,
         text: (value as any).text,
       }));
-      for(let i = 0; i < (this as any).myposts.length; i++) {
-        console.log((this as any).myposts[i].imageUrl);
-        await firebase.storage().ref((this as any).myposts[i].imageUrl).getDownloadURL().then((url) => {
-          console.log(url);
-          (this as any).myposts[i].imageUrl = url;
-        });
-      }
     },
   },
   async created(){

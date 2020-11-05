@@ -95,16 +95,12 @@ export default  {
         const value = snapshot.val();
         (this as any).post = {
           key: key,
+          imageUrl: value.imageUrl,
           composedAt: value.composedAt,
           tags: value.tags,
           text: value.text,
         };
       });
-    
-    await storageRef.getDownloadURL().then((url) => {
-      (this as any).post.imageUrl = url;
-      console.log(url);
-    });
   }
 }
 </script>
