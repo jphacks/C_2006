@@ -42,10 +42,19 @@ export default  {
     toDetailView(id: string) {
       (this as any).router.push(`/post/${id}`);
     },
+    async storeKeys(data: object) {
+      return Object.entries(data).map(([key, value]) => ({
+        key: key,
+        post: value.key
+      }));
+    },
     async storeInPosts(data: object) {
       (this as any).posts = Object.entries(data).map(([key, value]) => ({
         key: key,
-        post: value.key
+        composedAt: (value as any).composedAt,
+        imageUrl: (value as any).imageUrl,
+        tags: (value as any).tags,
+        text: (value as any).text,
       }));
     },
   },
@@ -55,10 +64,18 @@ export default  {
       .orderByChild('key')
       .limitToLast(10)
       .once('value')
-      .then(((snapshot) => {
+      .then(async (snapshot) => {
         console.log(snapshot.val());
-        (this as any).storeInPosts(snapshot.val());
-      }));
+        const postkeys = await (this as any).storeKeys(snapshot.val());
+        for(let i = 0; i < postkeys.length; i++) {
+          firebase.database().ref(`posts/${postkeys[i].post}`)
+            .once('value')
+            .then((snapshot) => {
+              console.log(snapshot.val());
+              (this as any).storeInPosts(snapshot.val());
+          });
+        }
+      });
   }
 }
 </script>
