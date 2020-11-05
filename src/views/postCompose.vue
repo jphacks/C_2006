@@ -147,10 +147,9 @@ export default {
         contentType: 'image/jpeg',
       };
       
-      await storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage, 'data_url', metadata)
+      storageRef.child(`images/${ key }.jpg`).putString((this as any).uploadedImage, 'data_url', metadata)
       .then((snapshot) => {
-          console.log(snapshot);
-          (this as any).newPost.imageUrl = snapshot.metadata.fullPath;
+          (this as any).newPost.imageUrl = snapshot.ref.getDownloadURL();
           (this as any).newPost.uid = firebase.auth().currentUser?.uid;
           (this as any).newPost.composedAt = firebase.database.ServerValue.TIMESTAMP;
 
