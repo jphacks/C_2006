@@ -95,6 +95,7 @@ export default  {
         const value = snapshot.val();
         (this as any).post = {
           key: key,
+          imageUrl: value.imageUrl,
           composedAt: value.composedAt,
           tags: value.tags,
           text: value.text,
