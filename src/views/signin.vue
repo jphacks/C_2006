@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { IonPage, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon , loadingController, toastController } from '@ionic/vue';
 import { personAddOutline, logInOutline } from 'ionicons/icons';
 import firebase from 'firebase';
 
@@ -52,20 +52,41 @@ export default  {
     }
   },
   methods: {
-    signin(email: string, passwd: string): void {
+    async signin(email: string, passwd: string){
+      const loading = await loadingController
+      .create({
+        message: 'Please wait...',
+        duration: 5000,
+      });
+
+      await loading.present();
+
       firebase.auth().signInWithEmailAndPassword(email, passwd).then(
         (user) => {
           console.log(user);
+          loading.dismiss();
+          this.openToast('success login','success');
           (this as any).$router.push('/');
         },
         (error) => {
           console.error(error);
+          loading.dismiss();
+          this.openToast('failed','danger');
         }
       );
     },
     toSignupView() {
       (this as any).$router.push('/signup');
-    }
+    },
+    async openToast(text: string,status: string) {
+      const toast = await toastController
+        .create({
+          message: text,
+          color: status,
+          duration: 2000
+        })
+      return toast.present();
+    },
   }
 }
 </script>
