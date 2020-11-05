@@ -11,7 +11,11 @@
           <ion-title size="large">Stocks</ion-title>
         </ion-toolbar>
       </ion-header>
-    
+
+      <div v-if="isEmpty">
+        No stocked posts
+      </div>
+
       <post-container :posts="posts" @postid="toDetailView"/>
     </ion-content>
   </ion-page>
@@ -37,6 +41,7 @@ export default  {
   data() {
     return {
       posts: [] as any,
+      isEmpty: false,
     }
   },
   methods: {
@@ -66,7 +71,11 @@ export default  {
       .limitToLast(10)
       .once('value')
       .then(async (snapshot) => {
-        console.log(snapshot.val());
+        if(!snapshot.val()) {
+          console.log('posts is nothing');
+          (this as any).isEmpty = true;
+          return;
+        }
         const postkeys = await (this as any).storeKeys(snapshot.val());
         for(let i = 0; i < postkeys.length; i++) {
           firebase.database().ref(`posts/${postkeys[i].post}`)
