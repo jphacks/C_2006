@@ -28,6 +28,11 @@
           </ion-fab-button>
         </ion-fab>
       </div>
+
+      <div v-if="isEmpty">
+        No stocked posts
+      </div>
+
     </ion-content>
   </ion-page>
 </template>
@@ -56,6 +61,7 @@ export default  {
   data() {
     return {
       myposts: [] as any,
+      isEmpty: false,
     }
   },
   methods: {
@@ -86,6 +92,13 @@ export default  {
       .limitToLast(10)
       .once('value')
       .then((snapshot) => {
+        
+        if(!snapshot.val()) {
+          console.log('posts is nothing');
+          (this as any).isEmpty = true;
+          return;
+        }
+
         (this as any).storeInPosts(snapshot.val());
       });
   }
