@@ -100,11 +100,6 @@ export default  {
           text: value.text,
         };
       });
-    
-    await storageRef.getDownloadURL().then((url) => {
-      (this as any).post.imageUrl = url;
-      console.log(url);
-    });
   }
 }
 </script>
