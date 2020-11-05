@@ -85,9 +85,13 @@
 </template>
 
 <script lang="ts">
-import firebase from 'firebase';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton, loadingController, toastController } from '@ionic/vue';
 import { imageOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline, pushOutline } from 'ionicons/icons';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+import 'firebase/storage';
 
 interface PostData{
   imageUrl: string;

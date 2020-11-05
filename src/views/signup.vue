@@ -42,7 +42,9 @@
 <script lang="ts">
 import { IonPage, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController } from '@ionic/vue';
 import { personAddOutline, logInOutline } from 'ionicons/icons';
-import firebase from 'firebase';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 export default  {
   name: 'Tab2',
