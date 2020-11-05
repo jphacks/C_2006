@@ -22,7 +22,9 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue
 import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 
 export default  {
   name: 'Tab1',
