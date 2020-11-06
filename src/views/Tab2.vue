@@ -12,7 +12,29 @@
         </ion-toolbar>
       </ion-header>
       
-      <div class="search"> <!-- v-if="posts.length === 0" -->
+      <div v-if="isSearchView" class="search"> <!-- v-if="posts.length === 0" -->
+        <ion-button expand="full" @click="isSearchView=false">Search posts you like<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
+
+        <ion-chip class="cost">
+          <ion-icon :icon="cashOutline"></ion-icon>
+          <ion-label>{{ tags.cost }}</ion-label>
+        </ion-chip>
+        <ion-chip class="with">
+          <ion-icon :icon="peopleOutline"></ion-icon>
+          <ion-label>{{ tags.with }}</ion-label>
+        </ion-chip>
+        <ion-chip class="time">
+          <ion-icon :icon="hourglassOutline"></ion-icon>
+          <ion-label>{{ tags.time }}</ion-label>
+        </ion-chip>
+        <ion-chip class="genre">
+          <ion-icon :icon="folderOutline"></ion-icon>
+          <ion-label>{{ tags.genre }}</ion-label>
+        </ion-chip>
+
+        <post-container :posts="filteredPosts" @postkey="toDetailView"/>
+      </div>
+      <div v-else>
         <ion-list>
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
@@ -62,15 +84,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="search()">
-          <ion-icon slot="start" :icon="searchOutline"></ion-icon>
-          Search
-        </ion-button>
-      </div>
-
-      <div class="result">
-        <!-- <ion-button expand="full" @click="clearPosts">条件を変えて検索する</ion-button> -->
-        <post-container :posts="filteredPosts" @postkey="toDetailView"/>
+        <ion-button @click="isSearchView=true">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
       </div>
       
     </ion-content>
@@ -116,6 +130,7 @@ export default  {
       },
       posts: [] as any,
       filteredPosts: [] as any,
+      isSearchView: true
     }
   },
   // computed: {
