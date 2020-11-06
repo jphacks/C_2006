@@ -18,7 +18,7 @@
       </ion-header>
       
 
-      <img :src="post.imageUrl" alt="picture"　class="image">
+      <img :src="post.imageUrl" alt="picture" class="image">
       <ion-chip class="cost">
         <ion-icon :icon="cashOutline"></ion-icon>
         <ion-label>{{ post.tags.cost }}</ion-label>
