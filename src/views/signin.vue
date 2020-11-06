@@ -85,7 +85,8 @@ export default  {
         .create({
           message: text,
           color: status,
-          duration: 2000
+          duration: 2000,
+          cssClass: 'tabs-bottom',
         })
       return toast.present();
     },

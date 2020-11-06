@@ -145,7 +145,8 @@ export default  {
         .create({
           message: flag? 'succeed' : 'failed',
           color: flag? 'success' : 'danger',
-          duration: 2000
+          duration: 2000,
+          cssClass: 'tabs-bottom',
         })
       return toast.present();
     },
