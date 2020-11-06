@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage } from '@ionic/vue';
-import { ellipse, square, triangle, searchOutline, bookmarkOutline, personCircleOutline } from 'ionicons/icons';
+import { searchOutline, bookmarkOutline, personCircleOutline } from 'ionicons/icons';
 
 export default {
   name: 'Tabs',
