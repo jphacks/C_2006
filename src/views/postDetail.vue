@@ -17,7 +17,7 @@
         </ion-toolbar>
       </ion-header>
       
-      <img :src="post.imageUrl" alt="picture">
+      <img :src="post.imageUrl" alt="picture" class="image">
       <ion-chip>
         <ion-icon :icon="cashOutline"></ion-icon>
         <ion-label>{{ post.tags.cost }}</ion-label>
@@ -171,3 +171,11 @@ export default  {
   }
 }
 </script>
+
+<style scoped>
+.image{
+  width: 100vmin;
+  height: 100vmin;
+  object-fit: contain;
+}
+</style>
