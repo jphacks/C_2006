@@ -63,7 +63,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="getPosts()">
+        <ion-button @click="changeTags()">
           <ion-icon slot="start" :icon="searchOutline"></ion-icon>
           Search
         </ion-button>
@@ -73,7 +73,6 @@
         <ion-button expand="full" @click="clearPosts">条件を変えて検索する</ion-button>
         <post-container :posts="posts" @postkey="toDetailView"/>
       </div>
-      
       
     </ion-content>
   </ion-page>
@@ -110,38 +109,37 @@ export default  {
         time: 'all',
         with: 'all',
       },
+      filterTags: {
+        cost: 'all',
+        genre: 'all',
+        time: 'all',
+        with: 'all',
+      },
       posts: [] as any
     }
   },
+  // computed: {
+  //   filteredPosts: {
+  //     cache: false,
+  //     get() {
+  //       let posts = (this as any).posts;
+  //       const tags = (this as any).filterTags;
+  //       for(const key of Object.keys(tags)) {
+  //         if(tags[key] !== 'all') {
+  //           posts = posts.filter((post: any) => {
+  //             return post.tags[key] === (this as any).tags[key];
+  //           });
+  //         }
+  //       }
+  //       return posts;
+  //     }
+      
+  //   },
+  // },
   methods: {
     // searchボタンをクリックしたら、データを受け取る。
     //データが存在すれば success というトーストを表示して投稿を表示する
     //データが存在しなければ failed というトーストを表示して検索画面のまま。
-    
-    async getPosts(): Promise<any>{
-      // loading
-      const loading = await loadingController
-        .create({
-          message: 'Please wait...',
-          duration: 3000,
-        });
-
-      await loading.present();
-
-      setTimeout(function() {
-        loading.dismiss()
-      }, 10000);
-
-      const postsRef = firebase.database().ref('posts');
-      postsRef.orderByChild('composedAt')
-        .limitToLast(10)
-        .once('value')
-        .then((snapshot) => {
-          (this as any).storeInPosts(snapshot.val());
-          loading.dismiss();
-          (this as any).openToast(true);
-        });
-    },
     async openToast(flag: boolean) {
       const toast = await toastController
         .create({
@@ -159,18 +157,8 @@ export default  {
           });
         }
       }
-
-      // solution with firebase
-      //
-      // const postsRef = firebase.database().ref('posts');
-      // postsRef.orderByChild('tags/cost')
-      //   .equalTo((this as any).tags.cost)
-      //   .limitToLast(10)
-      //   .once('value')
-      //   .then((snapshot) => {
-      //     (this as any).storeInPosts(snapshot.val());
-      //   });
     },
+    
     async storeInPosts(data: object) {
       (this as any).posts = Object.entries(data).map(([key, value]) => ({
         key: key,
@@ -186,6 +174,29 @@ export default  {
     clearPosts() {
       (this as any).posts = [];
     }
+  },
+  async created() {
+    const loading = await loadingController
+    .create({
+      message: 'Please wait...',
+      duration: 3000,
+    });
+
+    await loading.present();
+
+    setTimeout(function() {
+      loading.dismiss()
+    }, 10000);
+
+    const postsRef = firebase.database().ref('posts');
+    postsRef.orderByChild('composedAt')
+      .limitToLast(10)
+      .once('value')
+      .then((snapshot) => {
+        (this as any).storeInPosts(snapshot.val());
+        loading.dismiss();
+        (this as any).openToast(true);
+      });
   }
 }
 </script>
