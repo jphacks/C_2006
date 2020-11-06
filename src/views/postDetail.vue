@@ -6,7 +6,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content v-if="isLoading">
+    <ion-content v-if="isLoading" :fullscreen="true">
       Loading
     </ion-content>
 
@@ -50,8 +50,8 @@
       </p>
     </ion-content>
 
-    <ion-content v-else>
-      Post not Found.
+    <ion-content :fullscreen="true" v-else>
+      <div class="nopost"></div>
     </ion-content>
 
   </ion-page>
@@ -217,5 +217,12 @@ ion-chip {
   width: 100vmin;
   height: 100vmin;
   object-fit: contain;
+}
+
+.nopost {
+  background-image: url("../../public/assets/nopost.svg");
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
 }
 </style>

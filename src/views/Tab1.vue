@@ -12,11 +12,13 @@
         </ion-toolbar>
       </ion-header>
 
-      <div v-if="isEmpty">
-        No stocked posts
+      <div v-if="isEmpty" class="nopost">
       </div>
 
-      <post-container :posts="posts" @postkey="toDetailView"/>
+      <div v-else>
+        <post-container :posts="posts" @postkey="toDetailView"/>
+      </div>
+
     </ion-content>
   </ion-page>
 </template>
@@ -41,13 +43,17 @@ export default  {
   data() {
     return {
       posts: [] as any,
-      isEmpty: false,
+    }
+  },
+  computed: {
+    isEmpty(){
+      return ((this as any).posts.length === 0) ? true : false;
     }
   },
   methods: {
     toDetailView(key: string) {
       (this as any).router.push(`/post/${key}`);
-    },
+    }
   },
   async created() {
     const uid = firebase.auth().currentUser?.uid;
@@ -77,3 +83,12 @@ export default  {
   }
 }
 </script>
+
+<style scoped>
+.nopost {
+  background-image: url("../../public/assets/nopost.svg");
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+}
+</style>
