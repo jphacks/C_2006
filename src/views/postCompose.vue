@@ -228,6 +228,7 @@ export default {
       const toast = await toastController
         .create({
           message: text,
+          cssClass: 'tabs-bottom',
           color: status,
           duration: 2000
         })
