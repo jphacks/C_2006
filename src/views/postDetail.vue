@@ -117,8 +117,9 @@ export default  {
 
       firebase.database().ref(`stocks/${uid}`).push({
         key: key,
-      }).then(() => {
-        console.log('stock!');
+      }).then((snapshot) => {
+        (this as any).stockKey = snapshot.key;
+        (this as any).isStocked = true;
       }).catch((error) => {
         console.error(error);
       })
@@ -128,6 +129,9 @@ export default  {
       const uid = firebase.auth().currentUser?.uid;
       firebase.database().ref(`stocks/${uid}/${(this as any).stockKey}`).remove().then(() => {
         console.log('remove');
+        (this as any).stockKey = '';
+        (this as any).isStocked = false;
+
       });
     }
   },
