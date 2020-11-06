@@ -83,6 +83,9 @@ export default  {
         text: (value as any).text,
       }));
     },
+    ionViewDidEnter() {
+      (this as any).userName = firebase.auth().currentUser?.displayName;
+    }
   },
   async created(){
     const uid: string = firebase.auth().currentUser?.uid!;
