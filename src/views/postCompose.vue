@@ -85,9 +85,13 @@
 </template>
 
 <script lang="ts">
-import firebase from 'firebase';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonLabel, IonFabButton, IonSelect, IonSelectOption, IonList, IonItem, IonTextarea, IonButton, loadingController, toastController } from '@ionic/vue';
 import { imageOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline, pushOutline } from 'ionicons/icons';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+import 'firebase/storage';
 
 interface PostData{
   imageUrl: string;
@@ -141,6 +145,13 @@ export default {
         return;
       }
 
+      if ((this as any).newPost.text==='' || (this as any).newPost.tags.cost==='' || (this as any).newPost.tags.with==='' ||
+          (this as any).newPost.tags.genre==='' || (this as any).newPost.tags.time==='') {
+        loading.dismiss();
+        (this as any).openToast('please input all form','danger');
+        return;
+      }
+
       const key: string = firebase.database().ref('posts').push().key!;
       const storageRef = firebase.storage().ref();
       const metadata = {
@@ -153,10 +164,9 @@ export default {
           (this as any).newPost.uid = await firebase.auth().currentUser?.uid;
           (this as any).newPost.composedAt = await firebase.database.ServerValue.TIMESTAMP;
 
-          if((this as any).newPost.imageUrl==='' || (this as any).newPost.text==='' || (this as any).newPost.uid==='' ||
-           (this as any).newPost.tags.cost==='' || (this as any).newPost.tags.with==='' || (this as any).newPost.tags.genre==='' || (this as any).newPost.tags.time===''){
+          if((this as any).newPost.imageUrl==='' || (this as any).newPost.uid==='' || (this as any).newPost.composedAt === '') {
             loading.dismiss();
-            (this as any).openToast('please input all form','danger');
+            (this as any).openToast('Error happend!','danger');
             return;
           }
 
@@ -224,6 +234,7 @@ export default {
       const toast = await toastController
         .create({
           message: text,
+          cssClass: 'tabs-bottom',
           color: status,
           duration: 2000
         })

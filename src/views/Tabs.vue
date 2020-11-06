@@ -48,3 +48,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.md .tabs-bottom {
+  transform: translateY(-56px) !important;
+}
+</style>

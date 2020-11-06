@@ -11,8 +11,14 @@
           <ion-title size="large">Stocks</ion-title>
         </ion-toolbar>
       </ion-header>
-    
-      <post-container :posts="posts" @postid="toDetailView"/>
+
+      <div v-if="isEmpty" class="nopost">
+      </div>
+
+      <div v-else>
+        <post-container :posts="posts" @postkey="toDetailView"/>
+      </div>
+
     </ion-content>
   </ion-page>
 </template>
@@ -22,7 +28,9 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue
 import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 
 export default  {
   name: 'Tab1',
@@ -37,44 +45,50 @@ export default  {
       posts: [] as any,
     }
   },
+  computed: {
+    isEmpty(){
+      return ((this as any).posts.length === 0) ? true : false;
+    }
+  },
   methods: {
-    toDetailView(id: string) {
-      (this as any).router.push(`/post/${id}`);
-    },
-    async storeKeys(data: object) {
-      return Object.entries(data).map(([key, value]) => ({
-        key: key,
-        post: value.key
-      }));
-    },
-    async storeInPosts(data: object) {
-      (this as any).posts = Object.entries(data).map(([key, value]) => ({
-        key: key,
-        composedAt: (value as any).composedAt,
-        imageUrl: (value as any).imageUrl,
-        tags: (value as any).tags,
-        text: (value as any).text,
-      }));
-    },
+    toDetailView(key: string) {
+      (this as any).router.push(`/post/${key}`);
+    }
   },
   async created() {
     const uid = firebase.auth().currentUser?.uid;
     await firebase.database().ref(`stocks/${uid}`)
       .orderByChild('key')
       .limitToLast(10)
-      .once('value')
-      .then(async (snapshot) => {
-        console.log(snapshot.val());
-        const postkeys = await (this as any).storeKeys(snapshot.val());
-        for(let i = 0; i < postkeys.length; i++) {
-          firebase.database().ref(`posts/${postkeys[i].post}`)
-            .once('value')
-            .then((snapshot) => {
-              console.log(snapshot.val());
-              (this as any).posts.push(snapshot.val());
+      .on('child_added', (stockSnap) => {
+        firebase.database().ref(`posts/${stockSnap.val().key}`)
+          .once('value')
+          .then((postSnap) => {
+            const value = postSnap.val();
+            (this as any).posts.push({
+              key: stockSnap.val().key,
+              composedAt: value.composedAt,
+              imageUrl: value.imageUrl,
+            });
           });
-        }
+      });
+    await firebase.database().ref(`stocks/${uid}`)
+      .orderByChild('key')
+      .limitToLast(10)
+      .on('child_removed', (stockSnap) => {
+        (this as any).posts = (this as any).posts.filter((post: any) => {
+          return post.key !== stockSnap.val().key;
+        })
       });
   }
 }
 </script>
+
+<style scoped>
+.nopost {
+  background-image: url("../../public/assets/nopost.svg");
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+}
+</style>

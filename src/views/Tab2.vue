@@ -12,8 +12,29 @@
         </ion-toolbar>
       </ion-header>
       
-      <!-- no posts -->
-      <div v-if="posts.length === 0" class="search">
+      <div v-if="isSearchView" class="search"> <!-- v-if="posts.length === 0" -->
+        <ion-button expand="full" @click="isSearchView=false">Search posts you like<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
+
+        <ion-chip class="cost">
+          <ion-icon :icon="cashOutline"></ion-icon>
+          <ion-label>{{ tags.cost }}</ion-label>
+        </ion-chip>
+        <ion-chip class="with">
+          <ion-icon :icon="peopleOutline"></ion-icon>
+          <ion-label>{{ tags.with }}</ion-label>
+        </ion-chip>
+        <ion-chip class="time">
+          <ion-icon :icon="hourglassOutline"></ion-icon>
+          <ion-label>{{ tags.time }}</ion-label>
+        </ion-chip>
+        <ion-chip class="genre">
+          <ion-icon :icon="folderOutline"></ion-icon>
+          <ion-label>{{ tags.genre }}</ion-label>
+        </ion-chip>
+
+        <post-container :posts="filteredPosts" @postkey="toDetailView"/>
+      </div>
+      <div v-else>
         <ion-list>
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
@@ -63,17 +84,8 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="getPosts()">
-          <ion-icon slot="start" :icon="searchOutline"></ion-icon>
-          Search
-        </ion-button>
+        <ion-button @click="search()">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
       </div>
-      <!-- success get posts -->
-      <div v-else class="result">
-        <ion-button expand="full" @click="clearPosts">条件を変えて検索する</ion-button>
-        <post-container :posts="posts" @postkey="toDetailView"/>
-      </div>
-      
       
     </ion-content>
   </ion-page>
@@ -84,7 +96,9 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel
 import { searchOutline, cashOutline, hourglassOutline, peopleOutline, folderOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
-import firebase from 'firebase';
+
+import firebase from 'firebase/app';
+import 'firebase/database';
 
 export default  {
   name: 'Tab2',
@@ -108,67 +122,62 @@ export default  {
         time: 'all',
         with: 'all',
       },
-      posts: [] as any
+      filterTags: {
+        cost: 'all',
+        genre: 'all',
+        time: 'all',
+        with: 'all',
+      },
+      posts: [] as any,
+      filteredPosts: [] as any,
+      isSearchView: true
     }
   },
+  // computed: {
+  //   filteredPosts: {
+  //     cache: false,
+  //     get() {
+  //       let posts = (this as any).posts;
+  //       const tags = (this as any).filterTags;
+  //       for(const key of Object.keys(tags)) {
+  //         if(tags[key] !== 'all') {
+  //           posts = posts.filter((post: any) => {
+  //             return post.tags[key] === (this as any).tags[key];
+  //           });
+  //         }
+  //       }
+  //       return posts;
+  //     }
+      
+  //   },
+  // },
   methods: {
     // searchボタンをクリックしたら、データを受け取る。
     //データが存在すれば success というトーストを表示して投稿を表示する
     //データが存在しなければ failed というトーストを表示して検索画面のまま。
-    
-    async getPosts(): Promise<any>{
-      // loading
-      const loading = await loadingController
-        .create({
-          message: 'Please wait...',
-          duration: 3000,
-        });
-
-      await loading.present();
-
-      setTimeout(function() {
-        loading.dismiss()
-      }, 10000);
-
-      const postsRef = firebase.database().ref('posts');
-      postsRef.orderByChild('composedAt')
-        .limitToLast(10)
-        .once('value')
-        .then((snapshot) => {
-          (this as any).storeInPosts(snapshot.val());
-          loading.dismiss();
-          (this as any).openToast(true);
-        });
-    },
     async openToast(flag: boolean) {
       const toast = await toastController
         .create({
           message: flag? 'succeed' : 'failed',
           color: flag? 'success' : 'danger',
-          duration: 2000
+          duration: 2000,
+          cssClass: 'tabs-bottom',
         })
       return toast.present();
     },
     search() {
+      (this as any).filteredPosts = (this as any).posts;
       for(const key of Object.keys((this as any).tags)) {
         if((this as any).tags[key] !== 'all') {
-          (this as any).posts = (this as any).posts.filter((post: any) => {
-            return post.tags[key] === (this as any).tags[key];
+          (this as any).filteredPosts = (this as any).filteredPosts.filter((post: any) => {
+            return post.tags[key] === (this as any).tags[key] || post.tags[key] === 'all';
           });
         }
       }
-
-      // solution with firebase
-      //
-      // const postsRef = firebase.database().ref('posts');
-      // postsRef.orderByChild('tags/cost')
-      //   .equalTo((this as any).tags.cost)
-      //   .limitToLast(10)
-      //   .once('value')
-      //   .then((snapshot) => {
-      //     (this as any).storeInPosts(snapshot.val());
-      //   });
+      (this as any).filteredPosts.sort((a: any, b: any) => a.composedAt - b.composedAt);
+      (this as any).isSearchView = true;
     },
+    
     async storeInPosts(data: object) {
       (this as any).posts = Object.entries(data).map(([key, value]) => ({
         key: key,
@@ -184,6 +193,31 @@ export default  {
     clearPosts() {
       (this as any).posts = [];
     }
+  },
+  async created() {
+    const loading = await loadingController
+    .create({
+      message: 'Please wait...',
+      duration: 3000,
+    });
+
+    await loading.present();
+
+    setTimeout(function() {
+      loading.dismiss()
+    }, 10000);
+
+    const postsRef = firebase.database().ref('posts');
+    postsRef.orderByChild('composedAt')
+      .limitToLast(10)
+      .once('value')
+      .then(async (snapshot) => {
+        await (this as any).storeInPosts(snapshot.val());
+        (this as any).filteredPosts = (this as any).posts;
+        (this as any).filteredPosts.reverse();
+        loading.dismiss();
+        (this as any).openToast(true);
+      });
   }
 }
 </script>

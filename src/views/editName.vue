@@ -38,7 +38,9 @@
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonInput, IonItem, IonList, IonIcon, loadingController, toastController, alertController } from '@ionic/vue';
 import { logOutOutline, checkmarkOutline, chevronBackOutline } from 'ionicons/icons';
-import firebase from 'firebase';
+
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 export default  {
   name: 'Tab2',
@@ -114,7 +116,8 @@ export default  {
         .create({
           message: text,
           color: status,
-          duration: 2000
+          duration: 2000,
+          cssClass: 'tabs-bottom',
         })
       return toast.present();
     },

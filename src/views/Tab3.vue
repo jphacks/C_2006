@@ -28,6 +28,10 @@
           </ion-fab-button>
         </ion-fab>
       </div>
+
+      <div v-if="!myposts.length" class="nopost">
+      </div>
+
     </ion-content>
   </ion-page>
 </template>
@@ -38,7 +42,9 @@ import { settingsOutline, add } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import postContainer from '@/components/postContainer.vue';
 
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 
 export default  {
   name: 'Tab3',
@@ -66,14 +72,18 @@ export default  {
     toComposeView() {
       (this as any).$router.push('/compose');
     },
-    async storeInPosts(data: object) {
-      (this as any).myposts = Object.entries(data).map(([key, value]) => ({
-        key: key,
-        composedAt: (value as any).composedAt,
-        imageUrl: (value as any).imageUrl,
-        tags: (value as any).tags,
-        text: (value as any).text,
-      }));
+    ionViewDidEnter() {
+      (this as any).userName = firebase.auth().currentUser?.displayName;
+    },
+    addPost(snap: any) {
+      const post = snap.val();
+      (this as any).myposts.unshift({
+        key: snap.key,
+        composedAt: post.composedAt,
+        imageUrl: post.imageUrl,
+        tags: post.tags,
+        text: post.text,
+      });
     },
   },
   async created(){
@@ -82,17 +92,14 @@ export default  {
     await postsRef.orderByChild('uid')
       .equalTo(uid)
       .limitToLast(10)
-      .once('value')
-      .then((snapshot) => {
-        (this as any).storeInPosts(snapshot.val());
-      });
+      .on('child_added', (this as any).addPost);
   }
 }
 </script>
 
 <style scoped>
 .userarea{
-  margin: 0 5%;
+  margin: 10px 5%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -106,5 +113,12 @@ export default  {
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.nopost {
+  background-image: url("../../public/assets/nopost.svg");
+  width: 300px;
+  height: 300px;
+  margin: auto;
 }
 </style>
