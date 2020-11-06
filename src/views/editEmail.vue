@@ -123,7 +123,7 @@ export default  {
           loading.dismiss();
           (this as any).openToast('Nothing update!','warning');
         }
-      }).catch((error: any) => {
+      }).catch(() => {
         // An error happened.
         loading.dismiss();
         (this as any).openToast('Failed!','danger');
