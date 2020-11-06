@@ -12,8 +12,7 @@
         </ion-toolbar>
       </ion-header>
       
-      <!-- no posts -->
-      <div v-if="posts.length === 0" class="search">
+      <div class="search"> <!-- v-if="posts.length === 0" -->
         <ion-list>
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
@@ -63,15 +62,15 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="changeTags()">
+        <ion-button @click="search()">
           <ion-icon slot="start" :icon="searchOutline"></ion-icon>
           Search
         </ion-button>
       </div>
-      <!-- success get posts -->
-      <div v-else class="result">
-        <ion-button expand="full" @click="clearPosts">条件を変えて検索する</ion-button>
-        <post-container :posts="posts" @postkey="toDetailView"/>
+
+      <div class="result">
+        <!-- <ion-button expand="full" @click="clearPosts">条件を変えて検索する</ion-button> -->
+        <post-container :posts="filteredPosts" @postkey="toDetailView"/>
       </div>
       
     </ion-content>
@@ -115,7 +114,8 @@ export default  {
         time: 'all',
         with: 'all',
       },
-      posts: [] as any
+      posts: [] as any,
+      filteredPosts: [] as any,
     }
   },
   // computed: {
@@ -152,7 +152,7 @@ export default  {
     search() {
       for(const key of Object.keys((this as any).tags)) {
         if((this as any).tags[key] !== 'all') {
-          (this as any).posts = (this as any).posts.filter((post: any) => {
+          (this as any).filteredPosts = (this as any).posts.filter((post: any) => {
             return post.tags[key] === (this as any).tags[key];
           });
         }
@@ -192,8 +192,9 @@ export default  {
     postsRef.orderByChild('composedAt')
       .limitToLast(10)
       .once('value')
-      .then((snapshot) => {
-        (this as any).storeInPosts(snapshot.val());
+      .then(async (snapshot) => {
+        await (this as any).storeInPosts(snapshot.val());
+        (this as any).filteredPosts = (this as any).posts;
         loading.dismiss();
         (this as any).openToast(true);
       });
