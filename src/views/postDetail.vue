@@ -35,10 +35,14 @@
         <ion-label>{{ post.tags.genre }}</ion-label>
       </ion-chip>
 
-      
-      <ion-button v-if="!isMyPost" @click="stockPost()">
-        <ion-icon :icon="bookmarkOutline"></ion-icon>
-      </ion-button>
+      <div v-if="!isMyPost">
+        <ion-button v-if="!isStocked" @click="stockPost()">
+          <ion-icon :icon="bookmarkOutline"></ion-icon>
+        </ion-button>
+        <ion-button v-else @click="unstockPost()">
+          <ion-icon :icon="bookmarkOutline"></ion-icon>unstock
+        </ion-button>
+      </div>
       
       <p>
         {{ post.text }}
@@ -100,6 +104,8 @@ export default  {
       isLoading: true,
       isExist: true,
       isMyPost: false,
+      isStocked: false,
+      stockKey: '',
     }
   },
   methods: {
@@ -116,6 +122,13 @@ export default  {
       }).catch((error) => {
         console.error(error);
       })
+    },
+    async unstockPost() {
+      const key = (this as any).$route.params.id;
+      const uid = firebase.auth().currentUser?.uid;
+      firebase.database().ref(`stocks/${uid}/${(this as any).stockKey}`).remove().then(() => {
+        console.log('remove');
+      });
     }
   },
   async created() {
@@ -138,6 +151,16 @@ export default  {
         text: value.text,
         uid: value.uid,
       };
+      firebase.database().ref(`stocks/${uid}`)
+        .orderByChild('key')
+        .equalTo(key)
+        .once('value')
+        .then((snapshot) => {
+          if(snapshot.val()) {
+            (this as any).isStocked = true;
+            (this as any).stockKey = Object.keys(snapshot.val())[0];
+          }
+        });
       (this as any).isMyPost = uid === value.uid;
       (this as any).isLoading = false;
     });
