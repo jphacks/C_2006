@@ -84,7 +84,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="isSearchView=true">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
+        <ion-button @click="search()">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
       </div>
       
     </ion-content>
@@ -174,6 +174,7 @@ export default  {
           });
         }
       }
+      (this as any).isSearchView = true;
     },
     
     async storeInPosts(data: object) {
