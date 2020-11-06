@@ -18,19 +18,19 @@
       </ion-header>
       
       <img :src="post.imageUrl" alt="picture">
-      <ion-chip>
+      <ion-chip class="cost">
         <ion-icon :icon="cashOutline"></ion-icon>
         <ion-label>{{ post.tags.cost }}</ion-label>
       </ion-chip>
-      <ion-chip>
+      <ion-chip class="with">
         <ion-icon :icon="peopleOutline"></ion-icon>
         <ion-label>{{ post.tags.with }}</ion-label>
       </ion-chip>
-      <ion-chip>
+      <ion-chip class="time">
         <ion-icon :icon="hourglassOutline"></ion-icon>
         <ion-label>{{ post.tags.time }}</ion-label>
       </ion-chip>
-      <ion-chip>
+      <ion-chip class="genre">
         <ion-icon :icon="folderOutline"></ion-icon>
         <ion-label>{{ post.tags.genre }}</ion-label>
       </ion-chip>
@@ -171,3 +171,44 @@ export default  {
   }
 }
 </script>
+
+<style scoped>
+ion-chip {
+  background-color: white;
+}
+
+.cost {
+  border:solid 1px #F31010;
+}
+.cost ion-icon, .cost ion-label{
+  color: #F31010;
+}
+
+.with {
+  border:solid 1px #DC3EF6;
+}
+.with ion-icon, .with ion-label{
+  color: #DC3EF6;
+}
+
+.time {
+  border:solid 1px #3E93F6;
+}
+.time ion-icon, .time ion-label{
+  color: #3E93F6;
+}
+
+.genre {
+  border:solid 1px #3EDE05;
+}
+.genre ion-icon, .genre ion-label{
+  color: #3EDE05;
+}
+
+.cost {
+  border:solid 1px #F31010;
+}
+.cost ion-icon, .icon ion-label{
+  color: #F31010;
+}
+</style>
