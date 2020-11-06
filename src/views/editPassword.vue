@@ -110,7 +110,6 @@ export default  {
       
       originalUserData.reauthenticateWithCredential(credential).then(() => {
         // User re-authenticated.
-        console.log('success')
         if(newPassword !== originalUserData.password) {
           originalUserData.updatePassword(newPassword).then(() => {
             loading.dismiss();
@@ -129,7 +128,6 @@ export default  {
         // An error happened.
         loading.dismiss();
         (this as any).openToast('Failed!','danger');
-        console.log(error)
       });
     },
     backSetting() {

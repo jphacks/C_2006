@@ -65,7 +65,6 @@ export default  {
 
       firebase.auth().signInWithEmailAndPassword(email, passwd).then(
         (user) => {
-          console.log(user);
           loading.dismiss();
           this.openToast('success login','success');
           (this as any).$router.push('/');
