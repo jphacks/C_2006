@@ -16,7 +16,7 @@
         No stocked posts
       </div>
 
-      <post-container :posts="posts" @postid="toDetailView"/>
+      <post-container :posts="posts" @postkey="toDetailView"/>
     </ion-content>
   </ion-page>
 </template>
@@ -45,8 +45,8 @@ export default  {
     }
   },
   methods: {
-    toDetailView(id: string) {
-      (this as any).router.push(`/post/${id}`);
+    toDetailView(key: string) {
+      (this as any).router.push(`/post/${key}`);
     },
     async storeKeys(data: object) {
       return Object.entries(data).map(([key, value]) => ({
@@ -72,7 +72,6 @@ export default  {
       .once('value')
       .then(async (snapshot) => {
         if(!snapshot.val()) {
-          console.log('posts is nothing');
           (this as any).isEmpty = true;
           return;
         }
@@ -82,7 +81,12 @@ export default  {
             .once('value')
             .then((snapshot) => {
               console.log(snapshot.val());
-              (this as any).posts.push(snapshot.val());
+              const value = snapshot.val();
+              (this as any).posts.push({
+                key: postkeys[i].post,
+                composedAt: value.composedAt,
+                imageUrl: (value as any).imageUrl,
+              });
           });
         }
       });

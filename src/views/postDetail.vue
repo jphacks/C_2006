@@ -35,10 +35,14 @@
         <ion-label>{{ post.tags.genre }}</ion-label>
       </ion-chip>
 
-      
-      <ion-button @click="stockPost()">
-        <ion-icon :icon="bookmarkOutline"></ion-icon>
-      </ion-button>
+      <div v-if="!isMyPost">
+        <ion-button v-if="!isStocked" @click="stockPost()">
+          <ion-icon :icon="bookmarkOutline"></ion-icon>
+        </ion-button>
+        <ion-button v-else @click="unstockPost()">
+          <ion-icon :icon="bookmarkOutline"></ion-icon>unstock
+        </ion-button>
+      </div>
       
       <p>
         {{ post.text }}
@@ -99,6 +103,9 @@ export default  {
       },
       isLoading: true,
       isExist: true,
+      isMyPost: false,
+      isStocked: false,
+      stockKey: '',
     }
   },
   methods: {
@@ -110,16 +117,28 @@ export default  {
 
       firebase.database().ref(`stocks/${uid}`).push({
         key: key,
-      }).then(() => {
-        console.log('stock!');
+      }).then((snapshot) => {
+        (this as any).stockKey = snapshot.key;
+        (this as any).isStocked = true;
       }).catch((error) => {
         console.error(error);
       })
+    },
+    async unstockPost() {
+      const key = (this as any).$route.params.id;
+      const uid = firebase.auth().currentUser?.uid;
+      firebase.database().ref(`stocks/${uid}/${(this as any).stockKey}`).remove().then(() => {
+        console.log('remove');
+        (this as any).stockKey = '';
+        (this as any).isStocked = false;
+
+      });
     }
   },
   async created() {
     const key = (this as any).$route.params.id;
     const postRef = firebase.database().ref(`posts/${key}`);
+    const uid = firebase.auth().currentUser?.uid;
 
     await postRef.once('value').then((snapshot) => {
       if(!snapshot.val()) {
@@ -134,7 +153,19 @@ export default  {
         composedAt: value.composedAt,
         tags: value.tags,
         text: value.text,
+        uid: value.uid,
       };
+      firebase.database().ref(`stocks/${uid}`)
+        .orderByChild('key')
+        .equalTo(key)
+        .once('value')
+        .then((snapshot) => {
+          if(snapshot.val()) {
+            (this as any).isStocked = true;
+            (this as any).stockKey = Object.keys(snapshot.val())[0];
+          }
+        });
+      (this as any).isMyPost = uid === value.uid;
       (this as any).isLoading = false;
     });
   }
