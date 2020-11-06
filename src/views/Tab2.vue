@@ -174,6 +174,7 @@ export default  {
           });
         }
       }
+      (this as any).filteredPosts.sort((a: any, b: any) => a.composedAt - b.composedAt);
       (this as any).isSearchView = true;
     },
     
@@ -213,6 +214,7 @@ export default  {
       .then(async (snapshot) => {
         await (this as any).storeInPosts(snapshot.val());
         (this as any).filteredPosts = (this as any).posts;
+        (this as any).filteredPosts.reverse();
         loading.dismiss();
         (this as any).openToast(true);
       });
