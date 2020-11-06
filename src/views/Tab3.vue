@@ -78,7 +78,7 @@ export default  {
     },
     addPost(snap: any) {
       const post = snap.val();
-      (this as any).myposts.push({
+      (this as any).myposts.unshift({
         key: snap.key,
         composedAt: post.composedAt,
         imageUrl: post.imageUrl,
