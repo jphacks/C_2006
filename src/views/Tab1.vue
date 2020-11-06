@@ -66,6 +66,14 @@ export default  {
             });
           });
       });
+    await firebase.database().ref(`stocks/${uid}`)
+      .orderByChild('key')
+      .limitToLast(10)
+      .on('child_removed', (stockSnap) => {
+        (this as any).posts = (this as any).posts.filter((post: any) => {
+          return post.key !== stockSnap.val().key;
+        })
+      });
   }
 }
 </script>
