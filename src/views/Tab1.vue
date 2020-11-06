@@ -63,33 +63,56 @@ export default  {
         text: (value as any).text,
       }));
     },
+    addPost(snap: any) {
+      const post = snap.val();
+      (this as any).posts.push({
+        key: snap.key,
+        composedAt: post.composedAt,
+        imageUrl: post.imageUrl,
+        tags: post.tags,
+        text: post.text,
+      });
+    },
   },
   async created() {
     const uid = firebase.auth().currentUser?.uid;
     await firebase.database().ref(`stocks/${uid}`)
       .orderByChild('key')
       .limitToLast(10)
-      .once('value')
-      .then(async (snapshot) => {
-        if(!snapshot.val()) {
-          (this as any).isEmpty = true;
-          return;
-        }
-        const postkeys = await (this as any).storeKeys(snapshot.val());
-        for(let i = 0; i < postkeys.length; i++) {
-          firebase.database().ref(`posts/${postkeys[i].post}`)
-            .once('value')
-            .then((snapshot) => {
-              console.log(snapshot.val());
-              const value = snapshot.val();
-              (this as any).posts.push({
-                key: postkeys[i].post,
-                composedAt: value.composedAt,
-                imageUrl: (value as any).imageUrl,
-              });
+      .on('child_added', (stockSnap) => {
+        firebase.database().ref(`posts/${stockSnap.val().key}`)
+          .once('value')
+          .then((postSnap) => {
+            const value = postSnap.val();
+            (this as any).posts.push({
+              key: stockSnap.val().key,
+              composedAt: value.composedAt,
+              imageUrl: value.imageUrl,
+            });
           });
-        }
       });
+
+
+      // .then(async (snapshot) => {
+      //   if(!snapshot.val()) {
+      //     (this as any).isEmpty = true;
+      //     return;
+      //   }
+      //   const postkeys = await (this as any).storeKeys(snapshot.val());
+      //   for(let i = 0; i < postkeys.length; i++) {
+      //     firebase.database().ref(`posts/${postkeys[i].post}`)
+      //       .once('value')
+      //       .then((snapshot) => {
+      //         console.log(snapshot.val());
+      //         const value = snapshot.val();
+              // (this as any).posts.push({
+              //   key: postkeys[i].post,
+              //   composedAt: value.composedAt,
+              //   imageUrl: (value as any).imageUrl,
+              // });
+      //     });
+      //   }
+      // });
   }
 }
 </script>
