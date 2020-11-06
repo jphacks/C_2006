@@ -115,10 +115,9 @@ export default  {
             loading.dismiss();
             (this as any).openToast('Updated!','success');
             (this as any).$router.push('/setting');
-          }).catch((error: any) => {
+          }).catch(() => {
             loading.dismiss();
             (this as any).openToast('Failed!','danger');
-            console.error(error);
           });
         }else{
           loading.dismiss();

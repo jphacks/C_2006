@@ -126,7 +126,6 @@ export default  {
       })
     },
     async unstockPost() {
-      const key = (this as any).$route.params.id;
       const uid = firebase.auth().currentUser?.uid;
       firebase.database().ref(`stocks/${uid}/${(this as any).stockKey}`).remove().then(() => {
         console.log('remove');
