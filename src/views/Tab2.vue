@@ -84,7 +84,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="isSearchView=true">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
+        <ion-button @click="search()">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
       </div>
       
     </ion-content>
@@ -169,11 +169,12 @@ export default  {
       (this as any).filteredPosts = (this as any).posts;
       for(const key of Object.keys((this as any).tags)) {
         if((this as any).tags[key] !== 'all') {
-          (this as any).filteredPosts = (this as any).posts.filter((post: any) => {
+          (this as any).filteredPosts = (this as any).filteredPosts.filter((post: any) => {
             return post.tags[key] === (this as any).tags[key] || post.tags[key] === 'all';
           });
         }
       }
+      (this as any).isSearchView = true;
     },
     
     async storeInPosts(data: object) {
