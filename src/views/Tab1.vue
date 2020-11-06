@@ -48,31 +48,6 @@ export default  {
     toDetailView(key: string) {
       (this as any).router.push(`/post/${key}`);
     },
-    async storeKeys(data: object) {
-      return Object.entries(data).map(([key, value]) => ({
-        key: key,
-        post: value.key
-      }));
-    },
-    async storeInPosts(data: object) {
-      (this as any).posts = Object.entries(data).map(([key, value]) => ({
-        key: key,
-        composedAt: (value as any).composedAt,
-        imageUrl: (value as any).imageUrl,
-        tags: (value as any).tags,
-        text: (value as any).text,
-      }));
-    },
-    addPost(snap: any) {
-      const post = snap.val();
-      (this as any).posts.push({
-        key: snap.key,
-        composedAt: post.composedAt,
-        imageUrl: post.imageUrl,
-        tags: post.tags,
-        text: post.text,
-      });
-    },
   },
   async created() {
     const uid = firebase.auth().currentUser?.uid;
@@ -91,28 +66,6 @@ export default  {
             });
           });
       });
-
-
-      // .then(async (snapshot) => {
-      //   if(!snapshot.val()) {
-      //     (this as any).isEmpty = true;
-      //     return;
-      //   }
-      //   const postkeys = await (this as any).storeKeys(snapshot.val());
-      //   for(let i = 0; i < postkeys.length; i++) {
-      //     firebase.database().ref(`posts/${postkeys[i].post}`)
-      //       .once('value')
-      //       .then((snapshot) => {
-      //         console.log(snapshot.val());
-      //         const value = snapshot.val();
-              // (this as any).posts.push({
-              //   key: postkeys[i].post,
-              //   composedAt: value.composedAt,
-              //   imageUrl: (value as any).imageUrl,
-              // });
-      //     });
-      //   }
-      // });
   }
 }
 </script>
