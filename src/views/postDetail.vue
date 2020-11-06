@@ -36,7 +36,7 @@
       </ion-chip>
 
       
-      <ion-button @click="stockPost()">
+      <ion-button v-if="!isMyPost" @click="stockPost()">
         <ion-icon :icon="bookmarkOutline"></ion-icon>
       </ion-button>
       
@@ -99,6 +99,7 @@ export default  {
       },
       isLoading: true,
       isExist: true,
+      isMyPost: false,
     }
   },
   methods: {
@@ -120,6 +121,7 @@ export default  {
   async created() {
     const key = (this as any).$route.params.id;
     const postRef = firebase.database().ref(`posts/${key}`);
+    const uid = firebase.auth().currentUser?.uid;
 
     await postRef.once('value').then((snapshot) => {
       if(!snapshot.val()) {
@@ -134,7 +136,9 @@ export default  {
         composedAt: value.composedAt,
         tags: value.tags,
         text: value.text,
+        uid: value.uid,
       };
+      (this as any).isMyPost = uid === value.uid;
       (this as any).isLoading = false;
     });
   }
