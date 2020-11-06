@@ -29,7 +29,7 @@
         </ion-fab>
       </div>
 
-      <div v-if="isEmpty">
+      <div v-if="!myposts.length">
         No stocked posts
       </div>
 
@@ -61,7 +61,6 @@ export default  {
   data() {
     return {
       myposts: [] as any,
-      isEmpty: false,
     }
   },
   methods: {
@@ -74,18 +73,19 @@ export default  {
     toComposeView() {
       (this as any).$router.push('/compose');
     },
-    async storeInPosts(data: object) {
-      (this as any).myposts = Object.entries(data).map(([key, value]) => ({
-        key: key,
-        composedAt: (value as any).composedAt,
-        imageUrl: (value as any).imageUrl,
-        tags: (value as any).tags,
-        text: (value as any).text,
-      }));
-    },
     ionViewDidEnter() {
       (this as any).userName = firebase.auth().currentUser?.displayName;
-    }
+    },
+    addPost(snap: any) {
+      const post = snap.val();
+      (this as any).myposts.push({
+        key: snap.key,
+        composedAt: post.composedAt,
+        imageUrl: post.imageUrl,
+        tags: post.tags,
+        text: post.text,
+      });
+    },
   },
   async created(){
     const uid: string = firebase.auth().currentUser?.uid!;
@@ -93,17 +93,7 @@ export default  {
     await postsRef.orderByChild('uid')
       .equalTo(uid)
       .limitToLast(10)
-      .once('value')
-      .then((snapshot) => {
-        
-        if(!snapshot.val()) {
-          console.log('posts is nothing');
-          (this as any).isEmpty = true;
-          return;
-        }
-
-        (this as any).storeInPosts(snapshot.val());
-      });
+      .on('child_added', (this as any).addPost);
   }
 }
 </script>
