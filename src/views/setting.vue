@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonItem, IonList , IonIcon} from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonLabel, IonItem, IonList , IonIcon } from '@ionic/vue';
 import { logOutOutline, checkmarkOutline, chevronForwardOutline } from 'ionicons/icons';
 
 import firebase from 'firebase/app';
@@ -72,33 +72,6 @@ export default  {
     (this as any).userData.email = (this as any).originalUserData.email;
   },
   methods: {
-    update() {
-      const originalUserData = (this as any).originalUserData;
-      const userData = (this as any).userData;
-
-      if(!originalUserData) {
-        return;
-      }
-      // update displayName
-      if(userData.displayName !== originalUserData.displayName) {
-        originalUserData.updateProfile({
-          displayName: userData.displayName,
-        }).then(() => {
-          console.log('displayName updated!');
-        }).catch((error: any) => {
-          console.error(error);
-        });
-      }
-      // update email
-      // **in progress!**
-      if(userData.email !== originalUserData.email) {
-        originalUserData.updateEmail(userData.email).then(() => {
-          console.log('email updated!');
-        }).catch((error: any) => {
-          console.error(error);
-        });
-      }
-    },
     signout() {
       firebase.auth().signOut().then(() => {
         (this as any).$router.push('/signin');
