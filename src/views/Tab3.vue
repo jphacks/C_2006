@@ -29,8 +29,7 @@
         </ion-fab>
       </div>
 
-      <div v-if="!myposts.length">
-        No stocked posts
+      <div v-if="!myposts.length" class="nopost">
       </div>
 
     </ion-content>
@@ -100,7 +99,7 @@ export default  {
 
 <style scoped>
 .userarea{
-  margin: 0 5%;
+  margin: 10px 5%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -114,5 +113,12 @@ export default  {
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.nopost {
+  background-image: url("../../public/assets/nopost.svg");
+  width: 300px;
+  height: 300px;
+  margin: auto;
 }
 </style>
