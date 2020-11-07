@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton, toastController } from '@ionic/vue';
 import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline, trashOutline } from 'ionicons/icons';
 
 import firebase from 'firebase/app';
@@ -146,13 +146,24 @@ export default  {
     async deletePost() {
       const uid = firebase.auth().currentUser?.uid;
       if (uid !== (this as any).post.uid) {
+        this.openToast('This is not your post.','danger');
         return;
       }
       firebase.database().ref(`posts/${(this as any).post.key}`).remove().then(() => {
-        console.log('remove post!');
+        (this as any).openToast('Deleted.','success');
         (this as any).$router.push('/mypage');
       });
-    }
+    },
+    async openToast(text: string,status: string) {
+      const toast = await toastController
+        .create({
+          message: text,
+          cssClass: 'tabs-bottom',
+          color: status,
+          duration: 2000
+        })
+      return toast.present();
+    },
   },
   async created() {
     const key = (this as any).$route.params.id;
