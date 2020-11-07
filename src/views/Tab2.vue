@@ -13,7 +13,7 @@
       </ion-header>
       
       <div v-if="isSearchView" class="search"> <!-- v-if="posts.length === 0" -->
-        <ion-button expand="full" @click="isSearchView=false">Search posts you like<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
+        <ion-button class="searchbtn" expand="full" @click="isSearchView=false">Search posts you like<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
 
         <ion-chip class="cost">
           <ion-icon :icon="cashOutline"></ion-icon>
@@ -34,7 +34,7 @@
 
         <post-container :posts="filteredPosts" @postkey="toDetailView"/>
       </div>
-      <div v-else>
+      <div v-else class="searchselect">
         <ion-list>
           <ion-item>
             <ion-icon slot="start" :icon="cashOutline"></ion-icon>
@@ -84,7 +84,7 @@
           </ion-item>
         </ion-list>
 
-        <ion-button @click="search()">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
+        <ion-button class="searchbtn" @click="search()">Search with this tags<ion-icon slot="end" :icon="searchOutline"></ion-icon></ion-button>
       </div>
       
     </ion-content>
@@ -225,6 +225,48 @@ export default  {
 <style scoped>
 .search{
   margin: 0 5%;
+  text-align: center;
+}
+
+.searchbtn {
+  width: 250px;
+  margin: 20px auto;
+}
+
+ion-chip {
+  background-color: white;
+}
+
+.cost {
+  border:solid 1px #F31010;
+}
+.cost ion-icon, .cost ion-label{
+  color: #F31010;
+}
+
+.with {
+  border:solid 1px #DC3EF6;
+}
+.with ion-icon, .with ion-label{
+  color: #DC3EF6;
+}
+
+.time {
+  border:solid 1px #3E93F6;
+}
+.time ion-icon, .time ion-label{
+  color: #3E93F6;
+}
+
+.genre {
+  border:solid 1px #3EDE05;
+}
+.genre ion-icon, .genre ion-label{
+  color: #3EDE05;
+}
+
+.searchselect {
+  margin: 10px 5%;
   text-align: center;
 }
 </style>
