@@ -36,12 +36,21 @@
         <ion-label>{{ post.tags.genre }}</ion-label>
       </ion-chip>
 
-      <div v-if="!isMyPost">
+      <div v-if="isMyPost">
+        <ion-button @click="deletePost()">
+          <ion-icon :icon="trashOutline"></ion-icon>
+            Delete
+        </ion-button>
+      </div>
+
+      <div v-else>
         <ion-button v-if="!isStocked" @click="stockPost()">
           <ion-icon :icon="bookmarkOutline"></ion-icon>
+            Stock
         </ion-button>
         <ion-button v-else @click="unstockPost()">
-          <ion-icon :icon="bookmarkOutline"></ion-icon>unstock
+          <ion-icon :icon="bookmarkOutline"></ion-icon>
+            unStock
         </ion-button>
       </div>
       
@@ -59,7 +68,7 @@
 
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton } from '@ionic/vue';
-import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline } from 'ionicons/icons';
+import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline, trashOutline } from 'ionicons/icons';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -87,6 +96,7 @@ export default  {
       peopleOutline,
       folderOutline,
       bookmarkOutline,
+      trashOutline
     }
   },
   data() {
@@ -131,7 +141,16 @@ export default  {
         console.log('remove');
         (this as any).stockKey = '';
         (this as any).isStocked = false;
-
+      });
+    },
+    async deletePost() {
+      const uid = firebase.auth().currentUser?.uid;
+      if (uid !== (this as any).post.uid) {
+        return;
+      }
+      firebase.database().ref(`posts/${(this as any).post.key}`).remove().then(() => {
+        console.log('remove post!');
+        (this as any).$router.push('/mypage');
       });
     }
   },
