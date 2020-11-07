@@ -129,16 +129,17 @@ export default  {
       firebase.database().ref(`stocks/${uid}`).push({
         key: key,
       }).then((snapshot) => {
+        (this as any).openToast('Stocked!','success');
         (this as any).stockKey = snapshot.key;
         (this as any).isStocked = true;
       }).catch((error) => {
-        console.error(error);
+        this.openToast('Failed.','danger');
       })
     },
     async unstockPost() {
       const uid = firebase.auth().currentUser?.uid;
       firebase.database().ref(`stocks/${uid}/${(this as any).stockKey}`).remove().then(() => {
-        console.log('remove');
+        this.openToast('unStocked.','danger');
         (this as any).stockKey = '';
         (this as any).isStocked = false;
       });
@@ -150,7 +151,7 @@ export default  {
         return;
       }
       firebase.database().ref(`posts/${(this as any).post.key}`).remove().then(() => {
-        (this as any).openToast('Deleted.','success');
+        (this as any).openToast('Deleted.','danger');
         (this as any).$router.push('/mypage');
       });
     },

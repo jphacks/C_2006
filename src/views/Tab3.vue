@@ -97,7 +97,6 @@ export default  {
       .equalTo(uid)
       .limitToLast(10)
       .on('child_removed', (snapshot) => {
-        console.log(snapshot.key);
         (this as any).myposts = (this as any).myposts.filter((post: any) => {
           return post.key !== snapshot.key;
         })
