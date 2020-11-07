@@ -10,7 +10,7 @@
       Loading
     </ion-content>
 
-    <ion-content :fullscreen="true" v-else-if="isExist">
+    <ion-content :fullscreen="true" v-else-if="isExist" class="detailcontent">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Detail</ion-title>
@@ -45,11 +45,11 @@
 
       <div v-else>
         <ion-button v-if="!isStocked" @click="stockPost()">
-          <ion-icon :icon="bookmarkOutline"></ion-icon>
+          <ion-icon :icon="bookmarkOutline" class="stock-icon"></ion-icon>
             Stock
         </ion-button>
         <ion-button v-else @click="unstockPost()">
-          <ion-icon :icon="bookmarkOutline"></ion-icon>
+          <ion-icon :icon="bookmarkOutline" class="stock-icon"></ion-icon>
             unStock
         </ion-button>
       </div>
@@ -206,6 +206,7 @@ export default  {
 <style scoped>
 ion-chip {
   background-color: white;
+  margin: 10px 5px;
 }
 
 .cost {
@@ -236,13 +237,6 @@ ion-chip {
   color: #3EDE05;
 }
 
-.cost {
-  border:solid 1px #F31010;
-}
-.cost ion-icon, .icon ion-label{
-  color: #F31010;
-
-}
 .image{
   width: 100vmin;
   height: 100vmin;
@@ -254,5 +248,13 @@ ion-chip {
   width: 300px;
   height: 300px;
   margin: 0 auto;
+}
+
+.detailcontent {
+  text-align: center;
+}
+
+.stock-icon {
+  margin-right: 5px;
 }
 </style>
