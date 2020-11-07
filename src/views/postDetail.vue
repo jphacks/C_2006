@@ -36,12 +36,21 @@
         <ion-label>{{ post.tags.genre }}</ion-label>
       </ion-chip>
 
-      <div v-if="!isMyPost">
+      <div v-if="isMyPost">
+        <ion-button @click="deletePost()">
+          <ion-icon :icon="trashOutline"></ion-icon>
+            Delete
+        </ion-button>
+      </div>
+
+      <div v-else>
         <ion-button v-if="!isStocked" @click="stockPost()">
           <ion-icon :icon="bookmarkOutline"></ion-icon>
+            Stock
         </ion-button>
         <ion-button v-else @click="unstockPost()">
-          <ion-icon :icon="bookmarkOutline"></ion-icon>unstock
+          <ion-icon :icon="bookmarkOutline"></ion-icon>
+            unStock
         </ion-button>
       </div>
       
@@ -58,8 +67,8 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton } from '@ionic/vue';
-import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonChip, IonIcon, IonLabel, IonButton, toastController } from '@ionic/vue';
+import { cashOutline, hourglassOutline, peopleOutline, folderOutline, bookmarkOutline, trashOutline } from 'ionicons/icons';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -87,6 +96,7 @@ export default  {
       peopleOutline,
       folderOutline,
       bookmarkOutline,
+      trashOutline
     }
   },
   data() {
@@ -119,21 +129,42 @@ export default  {
       firebase.database().ref(`stocks/${uid}`).push({
         key: key,
       }).then((snapshot) => {
+        (this as any).openToast('Stocked!','success');
         (this as any).stockKey = snapshot.key;
         (this as any).isStocked = true;
       }).catch((error) => {
-        console.error(error);
+        this.openToast('Failed.','danger');
       })
     },
     async unstockPost() {
       const uid = firebase.auth().currentUser?.uid;
       firebase.database().ref(`stocks/${uid}/${(this as any).stockKey}`).remove().then(() => {
-        console.log('remove');
+        this.openToast('unStocked.','danger');
         (this as any).stockKey = '';
         (this as any).isStocked = false;
-
       });
-    }
+    },
+    async deletePost() {
+      const uid = firebase.auth().currentUser?.uid;
+      if (uid !== (this as any).post.uid) {
+        this.openToast('This is not your post.','danger');
+        return;
+      }
+      firebase.database().ref(`posts/${(this as any).post.key}`).remove().then(() => {
+        (this as any).openToast('Deleted.','danger');
+        (this as any).$router.push('/mypage');
+      });
+    },
+    async openToast(text: string,status: string) {
+      const toast = await toastController
+        .create({
+          message: text,
+          cssClass: 'tabs-bottom',
+          color: status,
+          duration: 2000
+        })
+      return toast.present();
+    },
   },
   async created() {
     const key = (this as any).$route.params.id;
